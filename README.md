@@ -9,7 +9,7 @@ Proyecto desarrollado para la asignatura *Administración de Proyectos Informát
 | Capa | Tecnología |
 |---|---|
 | Backend / Frontend | Django (Python) — arquitectura de 3 capas (MVT) |
-| Base de datos | SQLite (desarrollo) → PostgreSQL (antes de E2) |
+| Base de datos | SQLite (desarrollo) |
 | Metodología | Scrum, sprints de 2 semanas |
 | Gestión de tareas | GitHub Issues + GitHub Projects |
 

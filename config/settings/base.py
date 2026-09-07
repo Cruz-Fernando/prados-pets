@@ -77,3 +77,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Usamos nuestro propio modelo de Usuario (apps.usuarios) en vez del User
 # por defecto de Django, para poder agregarle rol, teléfono y estado.
 AUTH_USER_MODEL = "usuarios.Usuario"
+
+LOGIN_URL = "usuarios:login"
+LOGIN_REDIRECT_URL = "usuarios:dashboard"
+LOGOUT_REDIRECT_URL = "usuarios:login"

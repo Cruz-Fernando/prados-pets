@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Panel · Prados Pets{% endblock %}
+{% block body %}
+<div class="app-shell">
+  <header class="app-topbar">
+    <span class="app-topbar__brand">Prados Pets</span>
+    <div class="app-topbar__user">
+      <span>{{ user.nombre_completo|default:user.username }}</span>
+      {% if user.id_rol %}<span class="app-topbar__role">{{ user.id_rol }}</span>{% endif %}
+      <form method="post" action="{% url 'usuarios:logout' %}" style="display:inline">
+        {% csrf_token %}
+        <button type="submit" class="link-button">Cerrar sesión</button>
+      </form>
+    </div>
+  </header>
+
+  <main class="app-content">
+    <h1>Hola, {{ user.nombre_completo|default:user.username }}</h1>
+    <p class="app-content__subtitle">Este es tu panel. Los módulos se van habilitando sprint a sprint.</p>
+
+    <div class="app-content__grid">
+      <a href="/admin/directorio/dueno/" class="app-card">
+        <h2>Directorio</h2>
+        <p>Dueños y mascotas registradas.</p>
+      </a>
+      <a href="/admin/usuarios/usuario/" class="app-card">
+        <h2>Usuarios y roles</h2>
+        <p>Personal de la clínica y sus permisos.</p>
+      </a>
+      <div class="app-card app-card--disabled">
+        <h2>Agendamiento</h2>
+        <p>Disponible en el Sprint 2.</p>
+      </div>
+      <div class="app-card app-card--disabled">
+        <h2>Consulta y hospitalización</h2>
+        <p>Disponible en el Sprint 3.</p>
+      </div>
+    </div>
+  </main>
+</div>
+{% endblock %}

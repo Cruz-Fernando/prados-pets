@@ -1,0 +1,304 @@
+/* ============================================================
+   Prados Pets — sistema de diseño base
+   Paleta: morado (marca) + blanco. Sin grises SaaS genéricos,
+   sin sombras difusas repetidas, sin mayúsculas por defecto.
+   ============================================================ */
+
+:root {
+  --purple-900: #2E1440;   /* texto sobre fondo claro, superficies muy oscuras */
+  --purple-700: #4E1F73;   /* marca primaria: panel, botones */
+  --purple-600: #5E2C86;   /* hover de botones */
+  --purple-500: #7A3FA3;   /* acentos, enlaces */
+  --purple-100: #F1E8FA;   /* fondo suave */
+  --purple-050: #FAF6FD;   /* fondo de página */
+  --white: #FFFFFF;
+  --ink: #2B1F38;          /* texto principal, no negro puro */
+  --ink-muted: #6B5C7A;    /* texto secundario */
+  --border: #E4D9F0;
+  --error: #A13B5C;
+
+  --font-display: Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Times New Roman', serif;
+  --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  --radius: 6px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: var(--font-ui);
+  color: var(--ink);
+  background: var(--purple-050);
+}
+
+a { color: var(--purple-600); }
+
+:focus-visible {
+  outline: 2px solid var(--purple-500);
+  outline-offset: 2px;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* ---------- Pantalla de login (split screen asimétrico) ---------- */
+
+.auth-screen {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  min-height: 100vh;
+}
+
+.auth-brand {
+  position: relative;
+  background: var(--purple-700);
+  color: var(--white);
+  padding: 56px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.auth-brand__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.auth-brand__mark {
+  font-family: var(--font-display);
+  font-size: 30px;
+  letter-spacing: 0.01em;
+  display: block;
+}
+
+.auth-brand__tagline {
+  margin-top: 18px;
+  max-width: 30ch;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--purple-100);
+}
+
+/* Textura de fondo tipo huellas, hecha con gradientes, sin imagen */
+.auth-brand__pattern {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 14px 14px, rgba(255,255,255,0.10) 3px, transparent 3.5px),
+    radial-gradient(circle at 30px 26px, rgba(255,255,255,0.10) 2px, transparent 2.5px);
+  background-size: 64px 64px;
+  opacity: 0.6;
+}
+
+.auth-form-panel {
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+}
+
+.auth-form {
+  width: 100%;
+  max-width: 360px;
+}
+
+.auth-form h1 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  margin: 0 0 8px;
+  color: var(--purple-900);
+}
+
+.auth-form__hint {
+  margin: 0 0 28px;
+  color: var(--ink-muted);
+  font-size: 15px;
+}
+
+.auth-form__error {
+  background: #FBEAF0;
+  border: 1px solid #E9C3D4;
+  color: var(--error);
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.auth-form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-form label {
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin-bottom: 6px;
+  margin-top: 18px;
+}
+
+.auth-form label:first-of-type { margin-top: 0; }
+
+.auth-form input[type="text"],
+.auth-form input[type="password"] {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 11px 12px;
+  font-size: 15px;
+  font-family: var(--font-ui);
+  color: var(--ink);
+  background: var(--purple-050);
+}
+
+.auth-form input[type="text"]:focus,
+.auth-form input[type="password"]:focus {
+  border-color: var(--purple-500);
+  background: var(--white);
+}
+
+.auth-form button[type="submit"] {
+  margin-top: 28px;
+  background: var(--purple-700);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius);
+  padding: 13px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: background 0.15s ease;
+}
+
+.auth-form button[type="submit"]:hover {
+  background: var(--purple-600);
+}
+
+@media (max-width: 760px) {
+  .auth-screen {
+    grid-template-columns: 1fr;
+  }
+  .auth-brand {
+    padding: 36px 28px;
+    min-height: 200px;
+  }
+  .auth-form-panel {
+    padding: 36px 24px;
+  }
+}
+
+/* ---------- Panel / dashboard tras iniciar sesión ---------- */
+
+.app-topbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.app-topbar__brand {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--purple-900);
+}
+
+.app-topbar__user {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 14px;
+  color: var(--ink-muted);
+}
+
+.app-topbar__role {
+  background: var(--purple-100);
+  color: var(--purple-700);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: var(--purple-600);
+  font-size: 14px;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.app-content {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 48px 32px;
+}
+
+.app-content h1 {
+  font-family: var(--font-display);
+  font-size: 30px;
+  color: var(--purple-900);
+  margin: 0 0 8px;
+}
+
+.app-content__subtitle {
+  color: var(--ink-muted);
+  margin: 0 0 36px;
+  font-size: 15px;
+}
+
+.app-content__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.app-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+  background: var(--white);
+  transition: border-color 0.15s ease;
+}
+
+.app-card:hover {
+  border-color: var(--purple-500);
+}
+
+.app-card h2 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  margin: 0 0 6px;
+  color: var(--purple-900);
+}
+
+.app-card p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ink-muted);
+}
+
+.app-card--disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+@media (max-width: 640px) {
+  .app-content__grid {
+    grid-template-columns: 1fr;
+  }
+  .app-topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}

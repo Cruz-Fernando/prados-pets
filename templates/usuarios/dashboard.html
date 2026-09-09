@@ -4,7 +4,7 @@
 {% block body %}
 <div class="app-shell">
   <header class="app-topbar">
-    <span class="app-topbar__brand"><img src="{% static 'img/logo.png' %}" alt="Prados Pets" class="app-topbar__logo"> Prados Pets</span>
+    <span class="app-topbar__brand"><img src="{% static 'img/Logo_PradosPets.png' %}" alt="Prados Pets" class="app-topbar__logo"> Prados Pets</span>
     <div class="app-topbar__user">
       <span>{{ user.nombre_completo|default:user.username }}</span>
       {% if user.id_rol %}<span class="app-topbar__role">{{ user.id_rol }}</span>{% endif %}

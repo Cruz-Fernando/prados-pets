@@ -302,3 +302,58 @@ button {
     gap: 10px;
   }
 }
+/* ---------- Logo ---------- */
+
+.auth-brand__logo {
+  width: 64px;
+  height: 64px;
+  background: var(--white);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 6px 16px rgba(46, 20, 64, 0.25);
+}
+
+.auth-brand__logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* ---------- Mostrar/ocultar contraseña ---------- */
+
+.auth-form__password-wrap {
+  position: relative;
+  display: flex;
+}
+
+.auth-form__password-wrap input {
+  flex: 1;
+  padding-right: 40px;
+}
+
+.auth-form__toggle-password {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 16px;
+  padding: 4px;
+  line-height: 1;
+}
+
+/* ---------- Entrada suave del panel de login ---------- */
+
+.auth-form {
+  animation: auth-fade-in 0.5s ease both;
+}
+
+@keyframes auth-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}

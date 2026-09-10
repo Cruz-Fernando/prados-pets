@@ -70,11 +70,12 @@ button {
   z-index: 1;
 }
 
-.auth-brand__mark {
-  font-family: var(--font-display);
-  font-size: 30px;
-  letter-spacing: 0.01em;
+.auth-brand__logo {
   display: block;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .auth-brand__tagline {
@@ -207,6 +208,15 @@ button {
   font-family: var(--font-display);
   font-size: 20px;
   color: var(--purple-900);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.app-topbar__logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
 }
 
 .app-topbar__user {
@@ -292,6 +302,29 @@ button {
   cursor: default;
 }
 
+.app-messages {
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 0;
+}
+
+.app-messages__item {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.app-messages__item--error {
+  background: #FEE2E2;
+  color: #991B1B;
+}
+
+.app-messages__item--success {
+  background: #DCFCE7;
+  color: #166534;
+}
+
 @media (max-width: 640px) {
   .app-content__grid {
     grid-template-columns: 1fr;
@@ -301,59 +334,4 @@ button {
     align-items: flex-start;
     gap: 10px;
   }
-}
-/* ---------- Logo ---------- */
-
-.auth-brand__logo {
-  width: 64px;
-  height: 64px;
-  background: var(--white);
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-  margin-bottom: 20px;
-  box-shadow: 0 6px 16px rgba(46, 20, 64, 0.25);
-}
-
-.auth-brand__logo img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
-/* ---------- Mostrar/ocultar contraseña ---------- */
-
-.auth-form__password-wrap {
-  position: relative;
-  display: flex;
-}
-
-.auth-form__password-wrap input {
-  flex: 1;
-  padding-right: 40px;
-}
-
-.auth-form__toggle-password {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  font-size: 16px;
-  padding: 4px;
-  line-height: 1;
-}
-
-/* ---------- Entrada suave del panel de login ---------- */
-
-.auth-form {
-  animation: auth-fade-in 0.5s ease both;
-}
-
-@keyframes auth-fade-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
 }

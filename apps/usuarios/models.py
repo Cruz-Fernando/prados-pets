@@ -43,3 +43,10 @@ class Usuario(AbstractUser):
 
     def __str__(self):
         return self.nombre_completo or self.username
+
+    @property
+    def es_administrador(self):
+        """True si el usuario es superusuario o su rol asignado es 'administrador'."""
+        if self.is_superuser:
+            return True
+        return bool(self.id_rol and self.id_rol.nombre_rol == "administrador")

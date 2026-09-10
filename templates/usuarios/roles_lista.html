@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Roles · Prados Pets{% endblock %}
+{% block body %}
+<div class="app-shell">
+  {% include "usuarios/_topbar.html" %}
+
+  <main class="app-content">
+    <div class="app-toolbar">
+      <h1>Roles</h1>
+      <a href="{% url 'usuarios:rol_nuevo' %}" class="btn btn--primary">Nuevo rol</a>
+    </div>
+    <p class="app-content__subtitle">
+      Roles del sistema y su descripción. Un rol no se puede eliminar mientras tenga usuarios asignados.
+    </p>
+
+    {% if messages %}
+    <ul class="app-messages">
+      {% for message in messages %}
+        <li class="app-messages__item app-messages__item--{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+    <table class="app-table">
+      <thead>
+        <tr>
+          <th>Rol</th>
+          <th>Descripción</th>
+          <th>Usuarios</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for rol in roles %}
+        <tr>
+          <td>{{ rol.nombre_rol }}</td>
+          <td>{{ rol.descripcion|default:"—" }}</td>
+          <td>{{ rol.usuarios.count }}</td>
+          <td class="app-table__actions">
+            <a href="{% url 'usuarios:rol_editar' rol.pk %}">Editar</a>
+            <a href="{% url 'usuarios:rol_eliminar' rol.pk %}" class="app-table__danger-link">Eliminar</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4">Todavía no hay roles.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+</div>
+{% endblock %}

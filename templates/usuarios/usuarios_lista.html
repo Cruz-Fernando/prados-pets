@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Usuarios · Prados Pets{% endblock %}
+{% block body %}
+<div class="app-shell">
+  {% include "usuarios/_topbar.html" %}
+
+  <main class="app-content">
+    <div class="app-toolbar">
+      <h1>Usuarios</h1>
+      <a href="{% url 'usuarios:usuario_nuevo' %}" class="btn btn--primary">Nuevo usuario</a>
+    </div>
+    <p class="app-content__subtitle">
+      Registra al personal de la clínica y controla su rol y su acceso.
+    </p>
+
+    {% if messages %}
+    <ul class="app-messages">
+      {% for message in messages %}
+        <li class="app-messages__item app-messages__item--{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+    <table class="app-table">
+      <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Nombre completo</th>
+          <th>Rol</th>
+          <th>Estado</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in usuarios %}
+        <tr>
+          <td>{{ u.username }}</td>
+          <td>{{ u.nombre_completo|default:"—" }}</td>
+          <td>{{ u.id_rol|default:"Sin rol" }}</td>
+          <td><span class="badge badge--{{ u.estado }}">{{ u.estado }}</span></td>
+          <td class="app-table__actions">
+            <a href="{% url 'usuarios:usuario_editar' u.pk %}">Editar</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">Todavía no hay usuarios registrados.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+</div>
+{% endblock %}

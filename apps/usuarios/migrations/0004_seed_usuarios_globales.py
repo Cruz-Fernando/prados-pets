@@ -1,7 +1,7 @@
 from django.contrib.auth.hashers import make_password
 from django.db import migrations
 
-#CONTRASEÑAS DE EJEMPLO, 
+#CONTRASEÑAS DE EJEMPLO,
 # SUGERIR LAS PROPIAS COLOCARLAS EN UN TEXTO PLANO NO VISIBLE PARA PRE ELABORACION
 USUARIOS_GLOBALES = [
     ("administrador", "administrador@pradospets.com", "Admin123*", "Administrador General", "administrador", True, True),
@@ -41,7 +41,14 @@ def unseed_usuarios(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("usuarios", "0002_seed_roles"),
+        # Renumerada de 0003 a 0004: coincidía con nuestra propia
+        # 0003_usuario_rol_obligatorio (mismo número, mismo padre
+        # 0002_seed_roles), lo que generaba dos nodos hoja en el grafo de
+        # migraciones de la app usuarios y hacía fallar `migrate` con
+        # "Conflicting migrations detected; multiple leaf nodes".
+        # Contenido de la migración sin tocar — solo se corrigió el número
+        # y la dependencia para que quede después de la nuestra.
+        ("usuarios", "0003_usuario_rol_obligatorio"),
     ]
 
     operations = [

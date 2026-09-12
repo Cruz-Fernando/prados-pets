@@ -11,3 +11,4 @@ staticfiles/
 media/
 .vscode/
 .idea/
+datos_respaldo_sqlite.json

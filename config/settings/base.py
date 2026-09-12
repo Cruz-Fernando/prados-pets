@@ -4,11 +4,17 @@ Django 6.1 — no incluir aquí nada específico de un solo entorno
 (eso va en dev.py o prod.py).
 """
 
+import os
 from pathlib import Path
 
-# BASE_DIR apunta a la raíz del repo (dos niveles arriba de este archivo:
-# config/settings/base.py -> config/ -> raíz)
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+try:
+    from dotenv import load_dotenv
+    # BASE_DIR apunta a la raíz del repo (dos niveles arriba de este archivo:
+    # config/settings/base.py -> config/ -> raíz)
+    BASE_DIR = Path(__file__).resolve().parent.parent.parent
+    load_dotenv(BASE_DIR / ".env")
+except ImportError:
+    BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 INSTALLED_APPS = [
     "django.contrib.admin",

@@ -9,7 +9,7 @@ Proyecto desarrollado para la asignatura *Administración de Proyectos Informát
 | Capa | Tecnología |
 |---|---|
 | Backend / Frontend | Django (Python) — arquitectura de 3 capas (MVT) |
-| Base de datos | SQLite (desarrollo) |
+| Base de datos | PostgreSQL (Supabase) |
 | Metodología | Scrum, sprints de 2 semanas |
 | Gestión de tareas | GitHub Issues + GitHub Projects |
 
@@ -30,7 +30,7 @@ prados-pets/
 ├── config/                 # proyecto Django (settings, urls, wsgi)
 │   └── settings/
 │       ├── base.py
-│       ├── dev.py           # SQLite, DEBUG=True
+│       ├── dev.py           # PostgreSQL (Supabase), DEBUG=True
 │       └── prod.py          # PostgreSQL, DEBUG=False (E2)
 ├── apps/
 │   ├── directorio/          # dueños, mascotas

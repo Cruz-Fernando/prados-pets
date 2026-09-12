@@ -1,53 +1,26 @@
 /* ============================================================
-   Prados Pets — Sistema de Diseño Base
-   Tema oscuro: negro + morado ligero con microinteracciones fluidas.
-   Consistente en toda la app (login, panel, directorio, usuarios, roles).
+   Prados Pets — sistema de diseño base
+   Paleta: morado (marca) + blanco. Sin grises SaaS genéricos,
+   sin sombras difusas repetidas, sin mayúsculas por defecto.
    ============================================================ */
 
 :root {
-  /* Paleta de colores */
-  --bg: #0B0712;              /* fondo de página */
-  --surface: #15101F;         /* topbar, tarjetas, tablas */
-  --surface-alt: #1C1428;     /* encabezado de tabla, inputs */
-  --surface-hover: #221832;   /* hover en tarjetas y filas */
-  --text: #F1EDF7;            /* texto principal */
-  --text-muted: #A79BC0;      /* texto secundario */
-  --border: rgba(167, 139, 250, 0.18);
-  --border-hover: rgba(167, 139, 250, 0.4);
-  --accent: #A78BFA;          /* morado ligero: acentos, enlaces, foco */
-  --accent-light: #C4B5FD;    /* morado claro para brillo y texto */
-  --accent-strong: #7A3FA3;   /* morado base de botones */
-  --accent-strong-hover: #8B5CF6;
+  --purple-900: #2E1440;   /* texto sobre fondo claro, superficies muy oscuras */
+  --purple-700: #4E1F73;   /* marca primaria: panel, botones */
+  --purple-600: #5E2C86;   /* hover de botones */
+  --purple-500: #7A3FA3;   /* acentos, enlaces */
+  --purple-100: #F1E8FA;   /* fondo suave */
+  --purple-050: #FAF6FD;   /* fondo de página */
   --white: #FFFFFF;
-  --error: #F87171;
-  --error-bg: rgba(161, 59, 92, 0.18);
-  --error-border: rgba(239, 68, 68, 0.35);
-  --success: #86EFAC;
-  --success-bg: rgba(34, 197, 94, 0.15);
-  --success-border: rgba(34, 197, 94, 0.3);
+  --ink: #2B1F38;          /* texto principal, no negro puro */
+  --ink-muted: #6B5C7A;    /* texto secundario */
+  --border: #E4D9F0;
+  --error: #A13B5C;
 
-  /* Tipografías */
   --font-display: Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Times New Roman', serif;
   --font-ui: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
-  /* Formas y bordes */
-  --radius: 8px;
-  --radius-lg: 14px;
-  --radius-pill: 9999px;
-
-  /* Curvas y duraciones de animación fluidas */
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-fast: 0.18s cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-normal: 0.26s cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-slow: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-
-  /* Sombras y resplandores */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.4);
-  --shadow-glow: 0 4px 20px rgba(167, 139, 250, 0.35);
-  --shadow-glow-strong: 0 6px 24px rgba(139, 92, 246, 0.45);
-  --shadow-glow-danger: 0 6px 20px rgba(220, 38, 38, 0.4);
+  --radius: 6px;
 }
 
 * {
@@ -63,21 +36,11 @@ html, body {
   padding: 0;
   min-height: 100%;
   font-family: var(--font-ui);
-  color: var(--text);
-  background: var(--bg);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  color: var(--ink);
+  background: var(--purple-050);
 }
 
-a {
-  color: var(--accent);
-  text-decoration: none;
-  transition: color var(--transition-fast);
-}
-
-a:hover {
-  color: var(--accent-light);
-}
+a { color: var(--purple-600); }
 
 :focus-visible {
   outline: 2px solid var(--accent);
@@ -89,44 +52,11 @@ button {
   cursor: pointer;
 }
 
-/* ---------- Animaciones globales de entrada ---------- */
+/* ---------- Pantalla de login (split screen asimétrico) ---------- */
 
-@keyframes pageEnter {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes messageSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes glowPulse {
-  0%, 100% {
-    opacity: 0.8;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.04);
-  }
-}
-
-/* ---------- Login (tarjeta centrada con resplandor) ---------- */
-
-.auth-screen--dark {
+.auth-screen {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -137,58 +67,43 @@ button {
   padding: 24px;
 }
 
-.auth-glow {
-  position: absolute;
-  width: 700px;
-  height: 700px;
-  background: radial-gradient(circle, rgba(167, 139, 250, 0.28) 0%, rgba(167, 139, 250, 0.08) 42%, transparent 70%);
-  filter: blur(20px);
-  pointer-events: none;
-  animation: glowPulse 8s ease-in-out infinite alternate;
-}
-
-.auth-card {
+.auth-brand__inner {
   position: relative;
   z-index: 1;
-  width: 100%;
-  max-width: 380px;
-  background: rgba(21, 16, 31, 0.75);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 40px 36px;
-  text-align: center;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 24px rgba(167, 139, 250, 0.12);
-  animation: pageEnter var(--transition-normal) var(--ease-out) backwards;
-  transition: transform var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal);
 }
 
-.auth-card:hover {
-  border-color: rgba(167, 139, 250, 0.35);
-  box-shadow: 0 20px 42px rgba(0, 0, 0, 0.6), 0 0 30px rgba(167, 139, 250, 0.18);
-}
-
-.auth-card__logo {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  margin: 0 auto 16px;
+.auth-brand__logo {
   display: block;
-  box-shadow: 0 0 24px rgba(167, 139, 250, 0.35);
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
-.auth-card__logo:hover {
-  transform: scale(1.05) rotate(2deg);
-  box-shadow: 0 0 30px rgba(167, 139, 250, 0.55);
+.auth-brand__tagline {
+  margin-top: 18px;
+  max-width: 30ch;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--purple-100);
+}
+
+/* Textura de fondo tipo huellas, hecha con gradientes, sin imagen */
+.auth-brand__pattern {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 14px 14px, rgba(255,255,255,0.10) 3px, transparent 3.5px),
+    radial-gradient(circle at 30px 26px, rgba(255,255,255,0.10) 2px, transparent 2.5px);
+  background-size: 64px 64px;
+  opacity: 0.6;
 }
 
 .auth-card__title {
   font-family: var(--font-display);
-  font-size: 26px;
-  color: var(--text);
-  margin: 0 0 6px;
-  letter-spacing: -0.01em;
+  font-size: 28px;
+  margin: 0 0 8px;
+  color: var(--purple-900);
 }
 
 .auth-card__subtitle {
@@ -214,12 +129,11 @@ button {
   text-align: left;
 }
 
-.auth-card__form label {
-  font-size: 12px;
-  color: var(--text-muted);
-  margin: 16px 0 6px;
-  font-weight: 500;
-  transition: color var(--transition-fast);
+.auth-form label {
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin-bottom: 6px;
+  margin-top: 18px;
 }
 
 .auth-card__form label:first-of-type {
@@ -230,92 +144,46 @@ button {
   background: var(--surface-alt);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 11px 13px;
-  font-size: 14px;
-  color: var(--text);
+  padding: 11px 12px;
+  font-size: 15px;
   font-family: var(--font-ui);
-  transition: border-color var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast);
+  color: var(--ink);
+  background: var(--purple-050);
 }
 
-.auth-card__form input:focus {
-  outline: none;
-  border-color: var(--accent);
-  background: var(--surface);
-  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.22);
+.auth-form input[type="text"]:focus,
+.auth-form input[type="password"]:focus {
+  border-color: var(--purple-500);
+  background: var(--white);
 }
 
-.auth-card__forgot {
-  text-align: right;
-  margin-top: 10px;
-}
-
-.auth-card__forgot-link {
-  color: var(--accent);
-  font-size: 12px;
-  text-decoration: none;
-  opacity: 0.85;
-  transition: opacity var(--transition-fast), color var(--transition-fast);
-}
-
-.auth-card__forgot-link:hover {
-  opacity: 1;
-  color: var(--accent-light);
-  text-decoration: underline;
-}
-
-.auth-card__submit {
-  margin-top: 26px;
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+.auth-form button[type="submit"] {
+  margin-top: 28px;
+  background: var(--purple-700);
   color: var(--white);
   border: 1px solid rgba(167, 139, 250, 0.35);
   border-radius: var(--radius);
   padding: 13px 16px;
   font-size: 15px;
   font-weight: 600;
-  cursor: pointer;
-  letter-spacing: 0.01em;
-  box-shadow: 0 4px 14px rgba(109, 40, 217, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
+  transition: background 0.15s ease;
 }
 
-.auth-card__submit::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -120%;
-  width: 80%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16), transparent);
-  transform: skewX(-20deg);
-  transition: left 0.6s var(--ease-out);
-  pointer-events: none;
+.auth-form button[type="submit"]:hover {
+  background: var(--purple-600);
 }
 
-.auth-card__submit:hover {
-  background: linear-gradient(135deg, #9871F8 0%, #7C3AED 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 22px rgba(139, 92, 246, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  border-color: rgba(167, 139, 250, 0.6);
-}
-
-.auth-card__submit:hover::after {
-  left: 140%;
-}
-
-.auth-card__submit:active {
-  transform: translateY(1px) scale(0.98);
-  box-shadow: 0 2px 8px rgba(109, 40, 217, 0.4);
-}
-
-.auth-card__submit:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.5), 0 4px 14px rgba(109, 40, 217, 0.4);
-}
-
-@media (max-width: 480px) {
-  .auth-card { padding: 32px 24px; }
+@media (max-width: 760px) {
+  .auth-screen {
+    grid-template-columns: 1fr;
+  }
+  .auth-brand {
+    padding: 36px 28px;
+    min-height: 200px;
+  }
+  .auth-form-panel {
+    padding: 36px 24px;
+  }
 }
 
 /* ---------- Panel / Dashboard tras iniciar sesión ---------- */
@@ -327,8 +195,7 @@ button {
 }
 
 .app-topbar {
-  background: rgba(21, 16, 31, 0.85);
-  backdrop-filter: blur(12px);
+  background: var(--white);
   border-bottom: 1px solid var(--border);
   padding: 14px 32px;
   display: flex;
@@ -354,13 +221,6 @@ button {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  box-shadow: 0 0 12px rgba(167, 139, 250, 0.3);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-}
-
-.app-topbar__logo:hover {
-  transform: scale(1.08) rotate(3deg);
-  box-shadow: 0 0 18px rgba(167, 139, 250, 0.5);
 }
 
 .app-topbar__user {
@@ -372,39 +232,20 @@ button {
 }
 
 .app-topbar__role {
-  background: rgba(167, 139, 250, 0.14);
-  color: var(--accent-light);
-  border: 1px solid rgba(167, 139, 250, 0.25);
-  padding: 3px 10px;
-  border-radius: var(--radius-pill);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
+  background: var(--purple-100);
+  color: var(--purple-700);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 13px;
 }
 
 .link-button {
-  background: rgba(167, 139, 250, 0.08);
-  border: 1px solid rgba(167, 139, 250, 0.16);
-  color: var(--accent);
-  font-size: 13px;
-  font-weight: 500;
-  padding: 5px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  text-decoration: none;
-  transition: transform var(--transition-fast), background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
-}
-
-.link-button:hover {
-  background: rgba(167, 139, 250, 0.18);
-  border-color: rgba(167, 139, 250, 0.35);
-  color: var(--white);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 10px rgba(167, 139, 250, 0.15);
-}
-
-.link-button:active {
-  transform: translateY(1px) scale(0.97);
+  background: none;
+  border: none;
+  color: var(--purple-600);
+  font-size: 14px;
+  padding: 0;
+  text-decoration: underline;
 }
 
 .app-content {
@@ -441,62 +282,31 @@ button {
   text-decoration: none;
   color: inherit;
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 24px;
-  background: var(--surface);
-  position: relative;
-  overflow: hidden;
-  transition: transform var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal), background var(--transition-normal);
-}
-
-.app-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  opacity: 0;
-  transition: opacity var(--transition-normal);
+  border-radius: var(--radius);
+  padding: 22px;
+  background: var(--white);
+  transition: border-color 0.15s ease;
 }
 
 .app-card:hover {
-  border-color: var(--border-hover);
-  background: var(--surface-hover);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.5), 0 0 20px rgba(167, 139, 250, 0.12);
-}
-
-.app-card:hover::before {
-  opacity: 1;
-}
-
-.app-card:active {
-  transform: translateY(-1px) scale(0.99);
+  border-color: var(--purple-500);
 }
 
 .app-card h2 {
   font-family: var(--font-display);
   font-size: 19px;
   margin: 0 0 6px;
-  color: var(--text);
-  transition: color var(--transition-fast);
-}
-
-.app-card:hover h2 {
-  color: var(--white);
+  color: var(--purple-900);
 }
 
 .app-card p {
   margin: 0;
   font-size: 14px;
-  color: var(--text-muted);
-  line-height: 1.5;
+  color: var(--ink-muted);
 }
 
 .app-card--disabled {
-  opacity: 0.45;
+  opacity: 0.55;
   cursor: default;
   transform: none !important;
   box-shadow: none !important;
@@ -515,8 +325,8 @@ button {
 }
 
 .app-messages__item {
-  padding: 12px 16px;
-  border-radius: var(--radius);
+  padding: 10px 14px;
+  border-radius: 8px;
   font-size: 14px;
   margin-bottom: 10px;
   animation: messageSlideIn var(--transition-normal) var(--ease-out);
@@ -533,9 +343,8 @@ button {
 }
 
 .app-messages__item--success {
-  background: var(--success-bg);
-  color: var(--success);
-  border: 1px solid var(--success-border);
+  background: #DCFCE7;
+  color: #166534;
 }
 
 @media (max-width: 640px) {
@@ -569,13 +378,7 @@ button {
 }
 
 .app-topbar__nav a:hover {
-  color: var(--text);
-  background: rgba(167, 139, 250, 0.08);
-  transform: translateY(-1px);
-}
-
-.app-topbar__nav a:active {
-  transform: translateY(0);
+  color: var(--purple-600);
 }
 
 /* ---------- Listados y formularios internos ---------- */
@@ -595,19 +398,6 @@ button {
   margin: 0;
 }
 
-.app-search {
-  display: flex;
-  gap: 10px;
-  max-width: 420px;
-  margin-bottom: 24px;
-}
-
-.app-search .app-input {
-  flex: 1;
-}
-
-/* ---------- Sistema de Botones Mejorado ---------- */
-
 .btn {
   display: inline-flex;
   align-items: center;
@@ -623,101 +413,41 @@ button {
   overflow: hidden;
   cursor: pointer;
   border: 1px solid transparent;
-  user-select: none;
-  white-space: nowrap;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), opacity var(--transition-fast);
+  transition: background 0.15s ease, border-color 0.15s ease;
 }
 
-/* Efecto de destello sutil (shimmer) en hover */
-.btn::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -120%;
-  width: 80%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16), transparent);
-  transform: skewX(-20deg);
-  transition: left 0.6s var(--ease-out);
-  pointer-events: none;
-}
-
-.btn:hover::after {
-  left: 140%;
-}
-
-/* Microinteracción al presionar */
-.btn:active {
-  transform: translateY(1px) scale(0.98);
-}
-
-/* Foco accesible suave */
-.btn:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.45);
-}
-
-/* Variante: Primaria (Gradiente morado vibrante con resplandor) */
 .btn--primary {
-  background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+  background: var(--purple-700);
   color: var(--white);
   border-color: rgba(167, 139, 250, 0.3);
   box-shadow: 0 2px 10px rgba(109, 40, 217, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .btn--primary:hover {
-  background: linear-gradient(135deg, #9871F8 0%, #7C3AED 100%);
-  color: var(--white);
-  transform: translateY(-2px);
-  border-color: rgba(167, 139, 250, 0.55);
-  box-shadow: 0 6px 22px rgba(139, 92, 246, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-}
-
-.btn--primary:active {
-  transform: translateY(1px) scale(0.98);
-  box-shadow: 0 2px 6px rgba(109, 40, 217, 0.4);
+  background: var(--purple-600);
 }
 
 /* Variante: Ghost / Secundaria (Cristal sutil con borde iluminado) */
 .btn--ghost {
-  background: rgba(255, 255, 255, 0.03);
-  color: var(--text-muted);
+  background: transparent;
+  color: var(--ink-muted);
   border-color: var(--border);
   backdrop-filter: blur(6px);
 }
 
 .btn--ghost:hover {
-  background: rgba(167, 139, 250, 0.1);
-  color: var(--white);
-  border-color: rgba(167, 139, 250, 0.45);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(167, 139, 250, 0.15);
-}
-
-.btn--ghost:active {
-  transform: translateY(1px) scale(0.98);
-  background: rgba(167, 139, 250, 0.14);
+  border-color: var(--purple-500);
+  color: var(--purple-600);
 }
 
 /* Variante: Peligro / Eliminar (Rojo elegante con resplandor) */
 .btn--danger {
-  background: rgba(220, 38, 38, 0.14);
-  color: #F87171;
-  border-color: rgba(239, 68, 68, 0.35);
-  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.15);
+  background: var(--error);
+  color: var(--white);
 }
 
 .btn--danger:hover {
-  background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
-  color: var(--white);
-  transform: translateY(-2px);
-  border-color: rgba(239, 68, 68, 0.6);
-  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-.btn--danger:active {
-  transform: translateY(1px) scale(0.98);
-  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.35);
+  background: #8a3350;
 }
 
 /* ---------- Tablas ---------- */
@@ -738,25 +468,12 @@ button {
   padding: 13px 18px;
   font-size: 14px;
   border-bottom: 1px solid var(--border);
-  color: var(--text);
-  transition: background var(--transition-fast);
 }
 
 .app-table th {
   color: var(--text-muted);
   font-weight: 600;
-  background: var(--surface-alt);
-  letter-spacing: 0.02em;
-  font-size: 13px;
-  text-transform: uppercase;
-}
-
-.app-table tbody tr {
-  transition: background var(--transition-fast);
-}
-
-.app-table tbody tr:hover td {
-  background: rgba(167, 139, 250, 0.04);
+  background: var(--purple-050);
 }
 
 .app-table tbody tr:last-child td {
@@ -791,6 +508,10 @@ button {
   transform: translateY(0);
 }
 
+.app-table__actions a {
+  color: var(--accent);
+}
+
 .app-table__danger-link {
   color: var(--error) !important;
 }
@@ -811,15 +532,13 @@ button {
 }
 
 .badge--activo {
-  background: var(--success-bg);
-  color: var(--success);
-  border: 1px solid var(--success-border);
+  background: #DCFCE7;
+  color: #166534;
 }
 
 .badge--inactivo {
-  background: var(--error-bg);
-  color: var(--error);
-  border: 1px solid var(--error-border);
+  background: #FEE2E2;
+  color: #991B1B;
 }
 
 /* ---------- Formularios ---------- */
@@ -832,8 +551,7 @@ button {
 
 .app-form label {
   font-size: 13px;
-  font-weight: 500;
-  color: var(--text-muted);
+  color: var(--ink-muted);
   margin-bottom: 6px;
   margin-top: 18px;
   transition: color var(--transition-fast);
@@ -860,9 +578,8 @@ button {
 .app-form .app-input:focus,
 .app-form select:focus,
 .app-form textarea:focus {
-  border-color: var(--accent);
-  background: var(--surface);
-  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.22);
+  border-color: var(--purple-500);
+  background: var(--white);
   outline: none;
 }
 

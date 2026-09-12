@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Registrar Dueño · Prados Pets{% endblock %}
+{% block body %}
+<div class="app-shell">
+  {% include "usuarios/_topbar.html" %}
+
+  <main class="app-content app-content--narrow">
+    <h1>Registrar Nuevo Dueño</h1>
+
+    {% if messages %}
+    <ul class="app-messages">
+      {% for message in messages %}
+        <li class="app-messages__item app-messages__item--{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+    <form method="POST" class="app-form">
+      {% csrf_token %}
+
+      <label for="nombre">Nombre Completo</label>
+      <input type="text" id="nombre" name="nombre" class="app-input" value="{{ nombre|default:'' }}" required>
+
+      <label for="telefono">Teléfono</label>
+      <input type="text" id="telefono" name="telefono" class="app-input" value="{{ telefono|default:'' }}" required>
+
+      <label for="direccion">Dirección</label>
+      <input type="text" id="direccion" name="direccion" class="app-input" value="{{ direccion|default:'' }}" required>
+
+      <div class="app-form__actions">
+        <a href="{% url 'usuarios:dashboard' %}" class="btn btn--ghost">Cancelar</a>
+        <button type="submit" class="btn btn--primary">Guardar Dueño</button>
+      </div>
+    </form>
+  </main>
+</div>
+{% endblock %}

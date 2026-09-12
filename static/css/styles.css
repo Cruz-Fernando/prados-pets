@@ -1,26 +1,30 @@
 /* ============================================================
    Prados Pets — sistema de diseño base
-   Paleta: morado (marca) + blanco. Sin grises SaaS genéricos,
-   sin sombras difusas repetidas, sin mayúsculas por defecto.
+   Tema oscuro: negro + morado ligero. Consistente en toda la app
+   (login, panel, directorio, usuarios, roles).
    ============================================================ */
 
 :root {
-  --purple-900: #2E1440;   /* texto sobre fondo claro, superficies muy oscuras */
-  --purple-700: #4E1F73;   /* marca primaria: panel, botones */
-  --purple-600: #5E2C86;   /* hover de botones */
-  --purple-500: #7A3FA3;   /* acentos, enlaces */
-  --purple-100: #F1E8FA;   /* fondo suave */
-  --purple-050: #FAF6FD;   /* fondo de página */
+  --bg: #0B0712;              /* fondo de página */
+  --surface: #15101F;         /* topbar, tarjetas, tablas */
+  --surface-alt: #1C1428;     /* encabezado de tabla, inputs */
+  --text: #F1EDF7;            /* texto principal */
+  --text-muted: #A79BC0;      /* texto secundario */
+  --border: rgba(167, 139, 250, 0.18);
+  --accent: #A78BFA;          /* morado ligero: acentos, enlaces, foco */
+  --accent-strong: #7A3FA3;   /* morado base de botones */
+  --accent-strong-hover: #8B5CF6;
   --white: #FFFFFF;
-  --ink: #2B1F38;          /* texto principal, no negro puro */
-  --ink-muted: #6B5C7A;    /* texto secundario */
-  --border: #E4D9F0;
-  --error: #A13B5C;
+  --error: #F5A9BE;
+  --error-bg: rgba(161, 59, 92, 0.18);
+  --error-border: rgba(161, 59, 92, 0.4);
+  --success: #86EFAC;
+  --success-bg: rgba(34, 197, 94, 0.15);
 
   --font-display: Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Times New Roman', serif;
   --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
-  --radius: 6px;
+  --radius: 8px;
 }
 
 * { box-sizing: border-box; }
@@ -30,14 +34,14 @@ html, body {
   padding: 0;
   min-height: 100%;
   font-family: var(--font-ui);
-  color: var(--ink);
-  background: var(--purple-050);
+  color: var(--text);
+  background: var(--bg);
 }
 
-a { color: var(--purple-600); }
+a { color: var(--accent); }
 
 :focus-visible {
-  outline: 2px solid var(--purple-500);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
@@ -46,157 +50,146 @@ button {
   cursor: pointer;
 }
 
-/* ---------- Pantalla de login (split screen asimétrico) ---------- */
+/* ---------- Login (tarjeta centrada con resplandor) ---------- */
 
-.auth-screen {
-  display: grid;
-  grid-template-columns: 1fr 1.15fr;
+.auth-screen--dark {
   min-height: 100vh;
-}
-
-.auth-brand {
-  position: relative;
-  background: var(--purple-700);
-  color: var(--white);
-  padding: 56px 48px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  overflow: hidden;
-}
-
-.auth-brand__inner {
-  position: relative;
-  z-index: 1;
-}
-
-.auth-brand__logo {
-  display: block;
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-}
-
-.auth-brand__tagline {
-  margin-top: 18px;
-  max-width: 30ch;
-  font-size: 16px;
-  line-height: 1.5;
-  color: var(--purple-100);
-}
-
-/* Textura de fondo tipo huellas, hecha con gradientes, sin imagen */
-.auth-brand__pattern {
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(circle at 14px 14px, rgba(255,255,255,0.10) 3px, transparent 3.5px),
-    radial-gradient(circle at 30px 26px, rgba(255,255,255,0.10) 2px, transparent 2.5px);
-  background-size: 64px 64px;
-  opacity: 0.6;
-}
-
-.auth-form-panel {
-  background: var(--white);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 32px;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+  padding: 24px;
 }
 
-.auth-form {
+.auth-glow {
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.28) 0%, rgba(167, 139, 250, 0.08) 42%, transparent 70%);
+  filter: blur(10px);
+  pointer-events: none;
+}
+
+.auth-card {
+  position: relative;
+  z-index: 1;
   width: 100%;
-  max-width: 360px;
+  max-width: 380px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 40px 36px;
+  text-align: center;
+  backdrop-filter: blur(6px);
 }
 
-.auth-form h1 {
+.auth-card__logo {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  margin: 0 auto 16px;
+  display: block;
+  box-shadow: 0 0 24px rgba(167, 139, 250, 0.35);
+}
+
+.auth-card__title {
   font-family: var(--font-display);
-  font-size: 28px;
-  margin: 0 0 8px;
-  color: var(--purple-900);
+  font-size: 26px;
+  color: var(--text);
+  margin: 0 0 6px;
 }
 
-.auth-form__hint {
+.auth-card__subtitle {
+  color: var(--text-muted);
+  font-size: 14px;
   margin: 0 0 28px;
-  color: var(--ink-muted);
-  font-size: 15px;
 }
 
-.auth-form__error {
-  background: #FBEAF0;
-  border: 1px solid #E9C3D4;
+.auth-card__error {
+  background: var(--error-bg);
+  border: 1px solid var(--error-border);
   color: var(--error);
   padding: 10px 12px;
   border-radius: var(--radius);
-  font-size: 14px;
+  font-size: 13px;
   margin-bottom: 20px;
 }
 
-.auth-form form {
+.auth-card__form {
   display: flex;
   flex-direction: column;
+  text-align: left;
 }
 
-.auth-form label {
-  font-size: 13px;
-  color: var(--ink-muted);
-  margin-bottom: 6px;
-  margin-top: 18px;
+.auth-card__form label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 16px 0 6px;
 }
 
-.auth-form label:first-of-type { margin-top: 0; }
+.auth-card__form label:first-of-type {
+  margin-top: 0;
+}
 
-.auth-form input[type="text"],
-.auth-form input[type="password"] {
+.auth-card__form input {
+  background: var(--surface-alt);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 11px 12px;
-  font-size: 15px;
+  font-size: 14px;
+  color: var(--text);
   font-family: var(--font-ui);
-  color: var(--ink);
-  background: var(--purple-050);
 }
 
-.auth-form input[type="text"]:focus,
-.auth-form input[type="password"]:focus {
-  border-color: var(--purple-500);
-  background: var(--white);
+.auth-card__form input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--surface);
 }
 
-.auth-form button[type="submit"] {
-  margin-top: 28px;
-  background: var(--purple-700);
+.auth-card__forgot {
+  text-align: right;
+  margin-top: 10px;
+}
+
+.auth-card__forgot-link {
+  color: var(--accent);
+  font-size: 12px;
+  text-decoration: none;
+  opacity: 0.85;
+}
+
+.auth-card__forgot-link:hover {
+  text-decoration: underline;
+}
+
+.auth-card__submit {
+  margin-top: 26px;
+  background: linear-gradient(135deg, var(--accent-strong), var(--accent));
   color: var(--white);
   border: none;
   border-radius: var(--radius);
   padding: 13px 16px;
   font-size: 15px;
   font-weight: 600;
-  transition: background 0.15s ease;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
 }
 
-.auth-form button[type="submit"]:hover {
-  background: var(--purple-600);
+.auth-card__submit:hover {
+  opacity: 0.9;
 }
 
-@media (max-width: 760px) {
-  .auth-screen {
-    grid-template-columns: 1fr;
-  }
-  .auth-brand {
-    padding: 36px 28px;
-    min-height: 200px;
-  }
-  .auth-form-panel {
-    padding: 36px 24px;
-  }
+@media (max-width: 480px) {
+  .auth-card { padding: 32px 24px; }
 }
 
 /* ---------- Panel / dashboard tras iniciar sesión ---------- */
 
 .app-topbar {
-  background: var(--white);
+  background: var(--surface);
   border-bottom: 1px solid var(--border);
   padding: 16px 32px;
   display: flex;
@@ -207,7 +200,7 @@ button {
 .app-topbar__brand {
   font-family: var(--font-display);
   font-size: 20px;
-  color: var(--purple-900);
+  color: var(--text);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -217,6 +210,7 @@ button {
   width: 32px;
   height: 32px;
   border-radius: 50%;
+  box-shadow: 0 0 12px rgba(167, 139, 250, 0.3);
 }
 
 .app-topbar__user {
@@ -224,12 +218,12 @@ button {
   align-items: center;
   gap: 14px;
   font-size: 14px;
-  color: var(--ink-muted);
+  color: var(--text-muted);
 }
 
 .app-topbar__role {
-  background: var(--purple-100);
-  color: var(--purple-700);
+  background: rgba(167, 139, 250, 0.15);
+  color: var(--accent);
   padding: 4px 10px;
   border-radius: 999px;
   font-size: 13px;
@@ -238,7 +232,7 @@ button {
 .link-button {
   background: none;
   border: none;
-  color: var(--purple-600);
+  color: var(--accent);
   font-size: 14px;
   padding: 0;
   text-decoration: underline;
@@ -253,12 +247,12 @@ button {
 .app-content h1 {
   font-family: var(--font-display);
   font-size: 30px;
-  color: var(--purple-900);
+  color: var(--text);
   margin: 0 0 8px;
 }
 
 .app-content__subtitle {
-  color: var(--ink-muted);
+  color: var(--text-muted);
   margin: 0 0 36px;
   font-size: 15px;
 }
@@ -276,29 +270,29 @@ button {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 22px;
-  background: var(--white);
+  background: var(--surface);
   transition: border-color 0.15s ease;
 }
 
 .app-card:hover {
-  border-color: var(--purple-500);
+  border-color: var(--accent);
 }
 
 .app-card h2 {
   font-family: var(--font-display);
   font-size: 18px;
   margin: 0 0 6px;
-  color: var(--purple-900);
+  color: var(--text);
 }
 
 .app-card p {
   margin: 0;
   font-size: 14px;
-  color: var(--ink-muted);
+  color: var(--text-muted);
 }
 
 .app-card--disabled {
-  opacity: 0.55;
+  opacity: 0.5;
   cursor: default;
 }
 
@@ -310,19 +304,20 @@ button {
 
 .app-messages__item {
   padding: 10px 14px;
-  border-radius: 8px;
+  border-radius: var(--radius);
   font-size: 14px;
   margin-bottom: 8px;
 }
 
 .app-messages__item--error {
-  background: #FEE2E2;
-  color: #991B1B;
+  background: var(--error-bg);
+  color: var(--error);
+  border: 1px solid var(--error-border);
 }
 
 .app-messages__item--success {
-  background: #DCFCE7;
-  color: #166534;
+  background: var(--success-bg);
+  color: var(--success);
 }
 
 @media (max-width: 640px) {
@@ -336,7 +331,7 @@ button {
   }
 }
 
-/* ---------- Navegación del topbar (HU02) ---------- */
+/* ---------- Navegación del topbar ---------- */
 
 .app-topbar__nav {
   display: flex;
@@ -345,16 +340,16 @@ button {
 }
 
 .app-topbar__nav a {
-  color: var(--ink-muted);
+  color: var(--text-muted);
   text-decoration: none;
   font-size: 14px;
 }
 
 .app-topbar__nav a:hover {
-  color: var(--purple-600);
+  color: var(--accent);
 }
 
-/* ---------- Listados y formularios internos (HU02) ---------- */
+/* ---------- Listados y formularios internos ---------- */
 
 .app-content--narrow {
   max-width: 480px;
@@ -371,6 +366,17 @@ button {
   margin: 0;
 }
 
+.app-search {
+  display: flex;
+  gap: 10px;
+  max-width: 420px;
+  margin-bottom: 24px;
+}
+
+.app-search .app-input {
+  flex: 1;
+}
+
 .btn {
   display: inline-block;
   border-radius: var(--radius);
@@ -379,42 +385,43 @@ button {
   font-weight: 600;
   text-decoration: none;
   border: 1px solid transparent;
-  transition: background 0.15s ease, border-color 0.15s ease;
+  transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
 }
 
 .btn--primary {
-  background: var(--purple-700);
+  background: linear-gradient(135deg, var(--accent-strong), var(--accent));
   color: var(--white);
 }
 
 .btn--primary:hover {
-  background: var(--purple-600);
+  opacity: 0.9;
 }
 
 .btn--ghost {
   background: transparent;
-  color: var(--ink-muted);
+  color: var(--text-muted);
   border-color: var(--border);
 }
 
 .btn--ghost:hover {
-  border-color: var(--purple-500);
-  color: var(--purple-600);
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .btn--danger {
-  background: var(--error);
-  color: var(--white);
+  background: var(--error-bg);
+  color: var(--error);
+  border-color: var(--error-border);
 }
 
 .btn--danger:hover {
-  background: #8a3350;
+  opacity: 0.85;
 }
 
 .app-table {
   width: 100%;
   border-collapse: collapse;
-  background: var(--white);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
@@ -426,12 +433,13 @@ button {
   padding: 12px 16px;
   font-size: 14px;
   border-bottom: 1px solid var(--border);
+  color: var(--text);
 }
 
 .app-table th {
-  color: var(--ink-muted);
+  color: var(--text-muted);
   font-weight: 600;
-  background: var(--purple-050);
+  background: var(--surface-alt);
 }
 
 .app-table tbody tr:last-child td {
@@ -442,6 +450,10 @@ button {
   display: flex;
   gap: 14px;
   white-space: nowrap;
+}
+
+.app-table__actions a {
+  color: var(--accent);
 }
 
 .app-table__danger-link {
@@ -457,13 +469,13 @@ button {
 }
 
 .badge--activo {
-  background: #DCFCE7;
-  color: #166534;
+  background: var(--success-bg);
+  color: var(--success);
 }
 
 .badge--inactivo {
-  background: #FEE2E2;
-  color: #991B1B;
+  background: var(--error-bg);
+  color: var(--error);
 }
 
 .app-form {
@@ -474,7 +486,7 @@ button {
 
 .app-form label {
   font-size: 13px;
-  color: var(--ink-muted);
+  color: var(--text-muted);
   margin-bottom: 6px;
   margin-top: 18px;
 }
@@ -491,23 +503,23 @@ button {
   padding: 11px 12px;
   font-size: 15px;
   font-family: var(--font-ui);
-  color: var(--ink);
-  background: var(--purple-050);
+  color: var(--text);
+  background: var(--surface-alt);
   width: 100%;
 }
 
 .app-form .app-input:focus,
 .app-form select:focus,
 .app-form textarea:focus {
-  border-color: var(--purple-500);
-  background: var(--white);
+  border-color: var(--accent);
+  background: var(--surface);
   outline: none;
 }
 
 .app-form__hint {
   margin: 8px 0 0;
   font-size: 13px;
-  color: var(--ink-muted);
+  color: var(--text-muted);
 }
 
 .app-form__field-error {

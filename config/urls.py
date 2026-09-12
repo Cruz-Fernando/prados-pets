@@ -9,4 +9,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', RedirectView.as_view(pattern_name='usuarios:dashboard'), name='home'),
     path('', include('apps.usuarios.urls')),
+    path('directorio/', include('apps.directorio.urls')),
 ]

@@ -18,10 +18,11 @@
     {% endif %}
 
     <div class="app-content__grid">
-      <a href="/admin/directorio/dueno/" class="app-card">
+      <a href="/directorio/registrar-dueno/" class="app-card">
         <h2>Directorio</h2>
         <p>Dueños y mascotas registradas.</p>
       </a>
+
       {% if es_administrador %}
       <a href="{% url 'usuarios:usuarios_lista' %}" class="app-card">
         <h2>Usuarios y roles</h2>
@@ -33,10 +34,12 @@
         <p>Solo el administrador puede gestionar este módulo.</p>
       </div>
       {% endif %}
+
       <div class="app-card app-card--disabled">
         <h2>Agendamiento</h2>
         <p>Disponible en el Sprint 2.</p>
       </div>
+
       <div class="app-card app-card--disabled">
         <h2>Consulta y hospitalización</h2>
         <p>Disponible en el Sprint 3.</p>

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Registrar Dueño - Prados Pets{% endblock %}
+
+{% block body %}
+<div style="max-width: 500px; margin: 40px auto; padding: 25px; background: #ffffff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); font-family: sans-serif;">
+    <h2 style="margin-top: 0; color: #333;">Registrar Nuevo Dueño</h2>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div style="color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 4px; margin-bottom: 15px;">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <div style="margin-bottom: 15px;">
+            <label for="nombre" style="display: block; margin-bottom: 5px; font-weight: bold;">Nombre Completo:</label>
+            <input type="text" id="nombre" name="nombre" style="width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;" required>
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label for="telefono" style="display: block; margin-bottom: 5px; font-weight: bold;">Teléfono:</label>
+            <input type="text" id="telefono" name="telefono" style="width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;" required>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <label for="direccion" style="display: block; margin-bottom: 5px; font-weight: bold;">Dirección:</label>
+            <input type="text" id="direccion" name="direccion" style="width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;" required>
+        </div>
+
+        <button type="submit" style="width: 100%; padding: 10px; background-color: #6f42c1; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer;">
+            Guardar Dueño
+        </button>
+    </form>
+</div>
+{% endblock %}

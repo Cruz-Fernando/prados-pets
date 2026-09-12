@@ -76,7 +76,25 @@ python manage.py runserver
 
 Luego abre `http://127.0.0.1:8000/` en el navegador.
 
-> Nota: mientras el proyecto base de Django no esté creado, los pasos 3 a 6 no aplican todavía. Este README se actualiza en cuanto se suba el esqueleto inicial (HU31).
+### Cuentas de prueba para desarrollo (por rol)
+
+> **⚠️ AVISO IMPORTANTE DE SEGURIDAD:**
+> Las siguientes cuentas y contraseñas son de **uso exclusivo para pruebas y desarrollo local**.
+> La seguridad de estas credenciales es deliberadamente baja para facilitar el testing del equipo.
+> **Bajo ninguna circunstancia deben utilizarse en entornos de producción.**
+
+Puedes sincronizar o restablecer estas cuentas en cualquier momento ejecutando:
+```bash
+python manage.py crear_usuarios_prueba
+```
+
+| Rol | Usuario | Contraseña | Nombre Completo | Permisos |
+|---|---|---|---|---|
+| **Administrador** | `administrador` | `Admin123*` | Administrador General | Superusuario / Staff |
+| **Veterinario** | `veterinario` | `Vet123*` | Dr. Veterinario Pruebas | Personal clínico |
+| **Auxiliar** | `auxiliar` | `Auxiliar123*` | Auxiliar Veterinario Pruebas | Apoyo clínico |
+| **Groomer** | `groomer` | `Groomer123*` | Groomer / Estilista Canino | Peluquería |
+| **Domiciliario** | `domiciliario` | `Domicilio123*` | Repartidor / Domiciliario | Envíos |
 
 ## Flujo de trabajo con Git
 

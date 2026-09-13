@@ -1,27 +1,64 @@
 /* ============================================================
-   Prados Pets — sistema de diseño base
-   Paleta: morado (marca) + blanco. Sin grises SaaS genéricos,
-   sin sombras difusas repetidas, sin mayúsculas por defecto.
+   Prados Pets — Sistema de Diseño Base
+   Tema Oscuro Premium: Negro profundo + Morado luminoso
+   Consistente en toda la app (Login, Panel, Directorio, Usuarios, Roles).
    ============================================================ */
 
 :root {
-  --purple-900: #2E1440;   /* texto sobre fondo claro, superficies muy oscuras */
-  --purple-700: #4E1F73;   /* marca primaria: panel, botones */
-  --purple-600: #5E2C86;   /* hover de botones */
-  --purple-500: #7A3FA3;   /* acentos, enlaces */
-  --purple-100: #F1E8FA;   /* fondo suave */
-  --purple-050: #FAF6FD;   /* fondo de página */
-  --white: #FFFFFF;
-  --ink: #2B1F38;          /* texto principal, no negro puro */
-  --ink-muted: #6B5C7A;    /* texto secundario */
-  --border: #E4D9F0;
-  --error: #A13B5C;
+  /* Paleta de Color Principal (Dark & Purple) */
+  --bg: #0B0712;                   /* Fondo principal (negro profundo) */
+  --surface: #15101F;              /* Tarjetas, Topbar, Modales */
+  --surface-alt: #1C1428;          /* Inputs, Cabeceras de tabla, fondos secundarios */
+  --surface-hover: #241A34;        /* Hover en filas y elementos de superficie */
+  --surface-glass: rgba(21, 16, 31, 0.75);
 
-  --font-display: Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Times New Roman', serif;
+  /* Tipografía y Textos */
+  --text: #F1EDF7;                 /* Texto principal claro */
+  --text-muted: #A79BC0;           /* Texto secundario / hints */
+  --text-dim: #76698C;             /* Texto deshabilitado o tenue */
+
+  /* Acentos Morados */
+  --accent: #A78BFA;               /* Morado claro: enlaces, acentos, bordes activos */
+  --accent-light: #C4B5FD;         /* Morado pastel para detalles finos */
+  --accent-strong: #7A3FA3;        /* Morado de marca base */
+  --accent-gradient: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #9871F8 0%, #7C3AED 100%);
+
+  /* Bordes y Sombras */
+  --border: rgba(167, 139, 250, 0.18);
+  --border-subtle: rgba(167, 139, 250, 0.10);
+  --border-focus: #A78BFA;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --shadow-glow: 0 0 24px rgba(167, 139, 250, 0.30);
+  --shadow-glow-strong: 0 0 32px rgba(139, 92, 246, 0.45);
+
+  /* Estados: Éxito y Error */
+  --error: #F5A9BE;
+  --error-bg: rgba(161, 59, 92, 0.18);
+  --error-border: rgba(161, 59, 92, 0.40);
+  --success: #86EFAC;
+  --success-bg: rgba(34, 197, 94, 0.15);
+  --success-border: rgba(34, 197, 94, 0.35);
+
+  /* Tipografías */
+  --font-display: 'Plus Jakarta Sans', Georgia, 'Iowan Old Style', serif;
   --font-ui: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
-  --radius: 6px;
+  /* Formas y Transiciones */
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 16px;
+  --radius-pill: 9999px;
+
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* ============================================================
+   Reset y Estilos Globales
+   ============================================================ */
 
 * {
   box-sizing: border-box;
@@ -29,6 +66,7 @@
 
 html {
   scroll-behavior: smooth;
+  background-color: var(--bg);
 }
 
 html, body {
@@ -36,11 +74,21 @@ html, body {
   padding: 0;
   min-height: 100%;
   font-family: var(--font-ui);
-  color: var(--ink);
-  background: var(--purple-050);
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-a { color: var(--purple-600); }
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--accent-light);
+}
 
 :focus-visible {
   outline: 2px solid var(--accent);
@@ -52,11 +100,12 @@ button {
   cursor: pointer;
 }
 
-/* ---------- Pantalla de login (split screen asimétrico) ---------- */
+/* ============================================================
+   Pantalla de Login (Negro + Morado Luminoso / Glow)
+   ============================================================ */
 
+.auth-screen--dark,
 .auth-screen {
-  display: grid;
-  grid-template-columns: 1fr 1.15fr;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -67,59 +116,80 @@ button {
   padding: 24px;
 }
 
-.auth-brand__inner {
+/* Resplandor radial de fondo */
+.auth-glow {
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.25) 0%, rgba(122, 63, 163, 0.12) 35%, transparent 70%);
+  filter: blur(30px);
+  pointer-events: none;
+  animation: pulseGlow 6s ease-in-out infinite alternate;
+}
+
+@keyframes pulseGlow {
+  0% { transform: scale(0.95); opacity: 0.7; }
+  100% { transform: scale(1.05); opacity: 1; }
+}
+
+/* Tarjeta de inicio de sesión centrada */
+.auth-card {
   position: relative;
   z-index: 1;
+  width: 100%;
+  max-width: 390px;
+  background: rgba(21, 16, 31, 0.78);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 40px 36px;
+  text-align: center;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 1px 1px rgba(167, 139, 250, 0.15);
+  animation: pageEnter var(--transition-normal) var(--ease-out);
 }
 
-.auth-brand__logo {
-  display: block;
-  width: 96px;
-  height: 96px;
+.auth-card__logo {
+  width: 76px;
+  height: 76px;
   border-radius: 50%;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-}
-
-.auth-brand__tagline {
-  margin-top: 18px;
-  max-width: 30ch;
-  font-size: 16px;
-  line-height: 1.5;
-  color: var(--purple-100);
-}
-
-/* Textura de fondo tipo huellas, hecha con gradientes, sin imagen */
-.auth-brand__pattern {
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(circle at 14px 14px, rgba(255,255,255,0.10) 3px, transparent 3.5px),
-    radial-gradient(circle at 30px 26px, rgba(255,255,255,0.10) 2px, transparent 2.5px);
-  background-size: 64px 64px;
-  opacity: 0.6;
+  margin: 0 auto 18px;
+  display: block;
+  object-fit: cover;
+  box-shadow: 0 0 24px rgba(167, 139, 250, 0.4);
+  border: 2px solid rgba(167, 139, 250, 0.3);
 }
 
 .auth-card__title {
   font-family: var(--font-display);
-  font-size: 28px;
-  margin: 0 0 8px;
-  color: var(--purple-900);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 6px;
+  letter-spacing: -0.02em;
 }
 
 .auth-card__subtitle {
   color: var(--text-muted);
   font-size: 14px;
-  margin: 0 0 28px;
+  margin: 0 0 26px;
+  line-height: 1.4;
 }
 
-.auth-card__error {
+/* Mensajes de error en login / formularios */
+.auth-card__error,
+.auth-form__error {
   background: var(--error-bg);
   border: 1px solid var(--error-border);
   color: var(--error);
-  padding: 10px 12px;
-  border-radius: var(--radius);
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
   font-size: 13px;
   margin-bottom: 20px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   animation: messageSlideIn var(--transition-fast) var(--ease-out);
 }
 
@@ -129,11 +199,11 @@ button {
   text-align: left;
 }
 
-.auth-form label {
+.auth-card__form label {
   font-size: 13px;
-  color: var(--ink-muted);
-  margin-bottom: 6px;
-  margin-top: 18px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin: 16px 0 6px;
 }
 
 .auth-card__form label:first-of-type {
@@ -143,59 +213,88 @@ button {
 .auth-card__form input {
   background: var(--surface-alt);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 11px 12px;
-  font-size: 15px;
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 14px;
+  color: var(--text);
   font-family: var(--font-ui);
-  color: var(--ink);
-  background: var(--purple-050);
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.auth-form input[type="text"]:focus,
-.auth-form input[type="password"]:focus {
-  border-color: var(--purple-500);
-  background: var(--white);
+.auth-card__form input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: #20172e;
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.25);
 }
 
-.auth-form button[type="submit"] {
-  margin-top: 28px;
-  background: var(--purple-700);
+.auth-card__forgot {
+  text-align: right;
+  margin-top: 10px;
+}
+
+.auth-card__forgot-link {
+  color: var(--accent);
+  font-size: 13px;
+  text-decoration: none;
+  opacity: 0.85;
+  transition: opacity var(--transition-fast), text-decoration var(--transition-fast);
+}
+
+.auth-card__forgot-link:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.auth-card__submit {
+  margin-top: 26px;
+  background: var(--accent-gradient);
   color: var(--white);
-  border: 1px solid rgba(167, 139, 250, 0.35);
-  border-radius: var(--radius);
-  padding: 13px 16px;
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  border-radius: var(--radius-sm);
+  padding: 13px 18px;
   font-size: 15px;
   font-weight: 600;
-  transition: background 0.15s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(109, 40, 217, 0.4);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+  position: relative;
+  overflow: hidden;
 }
 
-.auth-form button[type="submit"]:hover {
-  background: var(--purple-600);
+.auth-card__submit:hover {
+  background: var(--accent-gradient-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 22px rgba(139, 92, 246, 0.5);
 }
 
-@media (max-width: 760px) {
-  .auth-screen {
-    grid-template-columns: 1fr;
-  }
-  .auth-brand {
-    padding: 36px 28px;
-    min-height: 200px;
-  }
-  .auth-form-panel {
-    padding: 36px 24px;
+.auth-card__submit:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 8px rgba(109, 40, 217, 0.4);
+}
+
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 32px 22px;
   }
 }
 
-/* ---------- Panel / Dashboard tras iniciar sesión ---------- */
+/* ============================================================
+   Estructura de la Aplicación (Dashboard y Vistas Internas)
+   ============================================================ */
 
 .app-shell {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background: var(--bg);
 }
 
+/* Barra superior (Topbar) */
 .app-topbar {
-  background: var(--white);
+  background: var(--surface-glass);
   border-bottom: 1px solid var(--border);
   padding: 14px 32px;
   display: flex;
@@ -204,12 +303,14 @@ button {
   position: sticky;
   top: 0;
   z-index: 100;
-  transition: border-color var(--transition-fast);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .app-topbar__brand {
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: 19px;
+  font-weight: 700;
   color: var(--text);
   display: flex;
   align-items: center;
@@ -221,6 +322,29 @@ button {
   width: 32px;
   height: 32px;
   border-radius: 50%;
+  box-shadow: 0 0 12px rgba(167, 139, 250, 0.3);
+  border: 1px solid rgba(167, 139, 250, 0.25);
+}
+
+.app-topbar__nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-topbar__nav a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.app-topbar__nav a:hover {
+  color: var(--text);
+  background: rgba(167, 139, 250, 0.12);
 }
 
 .app-topbar__user {
@@ -232,21 +356,33 @@ button {
 }
 
 .app-topbar__role {
-  background: var(--purple-100);
-  color: var(--purple-700);
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 13px;
+  background: rgba(167, 139, 250, 0.15);
+  color: var(--accent);
+  border: 1px solid rgba(167, 139, 250, 0.25);
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .link-button {
   background: none;
   border: none;
-  color: var(--purple-600);
+  color: var(--accent);
   font-size: 14px;
   padding: 0;
+  cursor: pointer;
   text-decoration: underline;
+  transition: color var(--transition-fast);
 }
+
+.link-button:hover {
+  color: var(--accent-light);
+}
+
+/* ============================================================
+   Contenido Principal
+   ============================================================ */
 
 .app-content {
   max-width: 960px;
@@ -254,23 +390,30 @@ button {
   margin: 0 auto;
   padding: 44px 32px;
   animation: pageEnter var(--transition-normal) var(--ease-out) backwards;
+  box-sizing: border-box;
+}
+
+.app-content--narrow {
+  max-width: 500px;
 }
 
 .app-content h1 {
   font-family: var(--font-display);
-  font-size: 30px;
+  font-size: 28px;
+  font-weight: 700;
   color: var(--text);
   margin: 0 0 8px;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
 .app-content__subtitle {
   color: var(--text-muted);
-  margin: 0 0 36px;
+  margin: 0 0 32px;
   font-size: 15px;
   line-height: 1.5;
 }
 
+/* Grilla de Tarjetas (Dashboard) */
 .app-content__grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -283,40 +426,54 @@ button {
   color: inherit;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 22px;
-  background: var(--white);
-  transition: border-color 0.15s ease;
+  padding: 24px;
+  background: var(--surface);
+  transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+  position: relative;
 }
 
 .app-card:hover {
-  border-color: var(--purple-500);
+  border-color: rgba(167, 139, 250, 0.45);
+  background: #191325;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 16px rgba(167, 139, 250, 0.15);
 }
 
 .app-card h2 {
   font-family: var(--font-display);
   font-size: 19px;
+  font-weight: 600;
   margin: 0 0 6px;
-  color: var(--purple-900);
+  color: var(--text);
 }
 
 .app-card p {
   margin: 0;
   font-size: 14px;
-  color: var(--ink-muted);
+  color: var(--text-muted);
+  line-height: 1.45;
 }
 
 .app-card--disabled {
-  opacity: 0.55;
+  opacity: 0.45;
   cursor: default;
   transform: none !important;
   box-shadow: none !important;
-  border-color: var(--border) !important;
+  border-color: var(--border-subtle) !important;
   background: var(--surface) !important;
 }
 
-.app-card--disabled::before {
-  display: none;
+.app-card--disabled:hover {
+  border-color: var(--border-subtle) !important;
+  background: var(--surface) !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
+
+/* ============================================================
+   Mensajes de Notificación
+   ============================================================ */
 
 .app-messages {
   list-style: none;
@@ -325,11 +482,11 @@ button {
 }
 
 .app-messages__item {
-  padding: 10px 14px;
-  border-radius: 8px;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
   font-size: 14px;
   margin-bottom: 10px;
-  animation: messageSlideIn var(--transition-normal) var(--ease-out);
+  animation: messageSlideIn var(--transition-fast) var(--ease-out);
   box-shadow: var(--shadow-sm);
   display: flex;
   align-items: center;
@@ -343,55 +500,20 @@ button {
 }
 
 .app-messages__item--success {
-  background: #DCFCE7;
-  color: #166534;
+  background: var(--success-bg);
+  color: var(--success);
+  border: 1px solid var(--success-border);
 }
 
-@media (max-width: 640px) {
-  .app-content__grid {
-    grid-template-columns: 1fr;
-  }
-  .app-topbar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 14px 20px;
-  }
-}
-
-/* ---------- Navegación del topbar ---------- */
-
-.app-topbar__nav {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.app-topbar__nav a {
-  color: var(--text-muted);
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  padding: 6px 12px;
-  border-radius: 6px;
-  transition: color var(--transition-fast), background var(--transition-fast), transform var(--transition-fast);
-}
-
-.app-topbar__nav a:hover {
-  color: var(--purple-600);
-}
-
-/* ---------- Listados y formularios internos ---------- */
-
-.app-content--narrow {
-  max-width: 480px;
-}
+/* ============================================================
+   Sistema de Botones
+   ============================================================ */
 
 .app-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
 .app-toolbar h1 {
@@ -403,7 +525,7 @@ button {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border-radius: var(--radius);
+  border-radius: var(--radius-sm);
   padding: 10px 18px;
   font-size: 14px;
   font-weight: 600;
@@ -413,44 +535,71 @@ button {
   overflow: hidden;
   cursor: pointer;
   border: 1px solid transparent;
-  transition: background 0.15s ease, border-color 0.15s ease;
+  user-select: none;
+  white-space: nowrap;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), opacity var(--transition-fast);
 }
 
+.btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.45);
+}
+
+/* Variante: Primaria */
 .btn--primary {
-  background: var(--purple-700);
+  background: var(--accent-gradient);
   color: var(--white);
   border-color: rgba(167, 139, 250, 0.3);
   box-shadow: 0 2px 10px rgba(109, 40, 217, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .btn--primary:hover {
-  background: var(--purple-600);
+  background: var(--accent-gradient-hover);
+  color: var(--white);
+  transform: translateY(-2px);
+  border-color: rgba(167, 139, 250, 0.55);
+  box-shadow: 0 6px 22px rgba(139, 92, 246, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
-/* Variante: Ghost / Secundaria (Cristal sutil con borde iluminado) */
+/* Variante: Ghost */
 .btn--ghost {
-  background: transparent;
-  color: var(--ink-muted);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-muted);
   border-color: var(--border);
   backdrop-filter: blur(6px);
 }
 
 .btn--ghost:hover {
-  border-color: var(--purple-500);
-  color: var(--purple-600);
+  background: rgba(167, 139, 250, 0.12);
+  color: var(--white);
+  border-color: rgba(167, 139, 250, 0.45);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(167, 139, 250, 0.15);
 }
 
-/* Variante: Peligro / Eliminar (Rojo elegante con resplandor) */
+/* Variante: Peligro */
 .btn--danger {
-  background: var(--error);
-  color: var(--white);
+  background: rgba(220, 38, 38, 0.14);
+  color: #F87171;
+  border-color: rgba(239, 68, 68, 0.35);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.15);
 }
 
 .btn--danger:hover {
-  background: #8a3350;
+  background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
+  color: var(--white);
+  transform: translateY(-2px);
+  border-color: rgba(239, 68, 68, 0.6);
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-/* ---------- Tablas ---------- */
+/* ============================================================
+   Tablas de Datos
+   ============================================================ */
 
 .app-table {
   width: 100%;
@@ -467,13 +616,27 @@ button {
   text-align: left;
   padding: 13px 18px;
   font-size: 14px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text);
+  transition: background var(--transition-fast);
 }
 
 .app-table th {
   color: var(--text-muted);
   font-weight: 600;
-  background: var(--purple-050);
+  background: var(--surface-alt);
+  letter-spacing: 0.02em;
+  font-size: 13px;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+
+.app-table tbody tr {
+  transition: background var(--transition-fast);
+}
+
+.app-table tbody tr:hover td {
+  background: rgba(167, 139, 250, 0.05);
 }
 
 .app-table tbody tr:last-child td {
@@ -498,22 +661,14 @@ button {
 }
 
 .app-table__actions a:hover {
-  background: rgba(167, 139, 250, 0.12);
+  background: rgba(167, 139, 250, 0.14);
   border-color: rgba(167, 139, 250, 0.25);
   color: var(--white);
   transform: translateY(-1px);
 }
 
-.app-table__actions a:active {
-  transform: translateY(0);
-}
-
-.app-table__actions a {
-  color: var(--accent);
-}
-
 .app-table__danger-link {
-  color: var(--error) !important;
+  color: #F87171 !important;
 }
 
 .app-table__danger-link:hover {
@@ -522,6 +677,7 @@ button {
   color: #FCA5A5 !important;
 }
 
+/* Badges / Etiquetas de Estado */
 .badge {
   display: inline-block;
   padding: 3px 10px;
@@ -532,26 +688,31 @@ button {
 }
 
 .badge--activo {
-  background: #DCFCE7;
-  color: #166534;
+  background: var(--success-bg);
+  color: var(--success);
+  border: 1px solid var(--success-border);
 }
 
 .badge--inactivo {
-  background: #FEE2E2;
-  color: #991B1B;
+  background: var(--error-bg);
+  color: var(--error);
+  border: 1px solid var(--error-border);
 }
 
-/* ---------- Formularios ---------- */
+/* ============================================================
+   Formularios Internos
+   ============================================================ */
 
 .app-form {
-  max-width: 420px;
+  max-width: 440px;
   display: flex;
   flex-direction: column;
 }
 
 .app-form label {
   font-size: 13px;
-  color: var(--ink-muted);
+  font-weight: 500;
+  color: var(--text-muted);
   margin-bottom: 6px;
   margin-top: 18px;
   transition: color var(--transition-fast);
@@ -562,31 +723,43 @@ button {
 }
 
 .app-form .app-input,
+.app-form input[type="text"],
+.app-form input[type="password"],
 .app-form select,
 .app-form textarea {
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: var(--radius-sm);
   padding: 11px 13px;
   font-size: 14px;
   font-family: var(--font-ui);
   color: var(--text);
   background: var(--surface-alt);
   width: 100%;
+  box-sizing: border-box;
   transition: border-color var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .app-form .app-input:focus,
+.app-form input[type="text"]:focus,
+.app-form input[type="password"]:focus,
 .app-form select:focus,
 .app-form textarea:focus {
-  border-color: var(--purple-500);
-  background: var(--white);
+  border-color: var(--accent);
+  background: #20172e;
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.22);
   outline: none;
 }
 
+.app-form select option {
+  background: var(--surface-alt);
+  color: var(--text);
+}
+
 .app-form__hint {
-  margin: 8px 0 0;
-  font-size: 13px;
-  color: var(--text-muted);
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.4;
 }
 
 .app-form__field-error {
@@ -602,25 +775,75 @@ button {
   margin-top: 30px;
 }
 
+/* ============================================================
+   Animaciones Keyframes
+   ============================================================ */
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   Responsive (Móvil y Tablet)
+   ============================================================ */
+
 @media (max-width: 640px) {
+  .app-content {
+    padding: 32px 18px;
+  }
+
+  .app-content__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .app-topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 20px;
+  }
+
   .app-toolbar {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
   }
+
   .app-table {
     display: block;
     overflow-x: auto;
   }
+
   .app-form__actions {
     flex-direction: column-reverse;
   }
+
   .app-form__actions .btn {
     width: 100%;
   }
 }
 
-/* ---------- Reducción de movimiento para accesibilidad ---------- */
+/* ============================================================
+   Accesibilidad (Reducción de Movimiento)
+   ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {

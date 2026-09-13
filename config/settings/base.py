@@ -80,10 +80,13 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-# AGREGAR ESTA LÍNEA:
+# Dónde busca Django los estáticos durante el desarrollo (logos, imágenes, CSS)
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+
+# Dónde recojo/copia Django TODOS los estáticos para PRODUCCIÓN cuando ejecutas collectstatic:
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 

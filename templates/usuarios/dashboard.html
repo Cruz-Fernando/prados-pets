@@ -6,9 +6,6 @@
   {% include "usuarios/_topbar.html" %}
 
   <main class="app-content">
-    <h1>Hola, {{ user.nombre_completo|default:user.username }}</h1>
-    <p class="app-content__subtitle">Este es tu panel. Los módulos se van habilitando sprint a sprint.</p>
-
     {% if messages %}
     <ul class="app-messages">
       {% for message in messages %}
@@ -16,6 +13,31 @@
       {% endfor %}
     </ul>
     {% endif %}
+
+    <section class="app-hero">
+      <div class="app-hero__content">
+        <span class="app-hero__badge">Sistema Veterinario</span>
+        <h1 class="app-hero__title">¡Hola, {{ user.nombre_completo|default:user.username }}!</h1>
+        <p class="app-hero__description">
+          Bienvenido al panel principal de <strong>Prados Pets</strong>. Gestiona pacientes, propietarios y los servicios clínicos de tu equipo.
+        </p>
+        <div class="app-hero__actions">
+          <a href="/directorio/registrar-dueno/" class="btn btn--primary">Registrar dueño</a>
+          {% if es_administrador %}
+          <a href="{% url 'usuarios:usuarios_lista' %}" class="btn btn--ghost">Usuarios y roles</a>
+          {% endif %}
+        </div>
+      </div>
+      <div class="app-hero__graphic">
+        <div class="app-hero__glow"></div>
+        <img src="{% static 'img/mascotas_prados_pets.png' %}" alt="Mascotas Prados Pets" class="app-hero__img">
+      </div>
+    </section>
+
+    <div class="app-section-header">
+      <h2>Módulos del Sistema</h2>
+      <p>Acceso rápido a las áreas operativas de la clínica.</p>
+    </div>
 
     <div class="app-content__grid">
       <a href="/directorio/registrar-dueno/" class="app-card">

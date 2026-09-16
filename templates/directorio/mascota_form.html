@@ -23,6 +23,7 @@
       {{ form.as_p }}
 
       <div class="app-form__actions">
+        <a href="{% url 'usuarios:dashboard' %}" class="btn btn--ghost">Cancelar</a>
         <a href="{% url 'registrar_dueno' %}" class="btn btn--ghost">Registrar Dueño</a>
         <button type="submit" class="btn btn--primary">Guardar Mascota</button>
       </div>

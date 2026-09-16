@@ -23,7 +23,21 @@ class Mascota(models.Model):
     ESPECIE_CHOICES = [
         ("perro", "Perro"),
         ("gato", "Gato"),
+        ("ave", "Ave"),
+        ("roedor", "Roedor"),
+        ("conejo", "Conejo"),
         ("otro", "Otro"),
+    ]
+
+    TAMANO_CHOICES = [
+        ("pequeno", "Pequeño"),
+        ("mediano", "Mediano"),
+        ("grande", "Grande"),
+    ]
+
+    SEXO_CHOICES = [
+        ("M", "Masculino"),
+        ("F", "Femenino"),
     ]
 
     id_mascota = models.AutoField(primary_key=True)
@@ -31,8 +45,8 @@ class Mascota(models.Model):
     nombre = models.CharField(max_length=100)
     especie = models.CharField(max_length=20, choices=ESPECIE_CHOICES)
     raza = models.CharField(max_length=100, blank=True)
-    tamano = models.CharField(max_length=20, blank=True)
-    sexo = models.CharField(max_length=10, blank=True)
+    tamano = models.CharField(max_length=20, choices=TAMANO_CHOICES, blank=True)
+    sexo = models.CharField(max_length=10, choices=SEXO_CHOICES, blank=True)
     fecha_nacimiento = models.DateField(null=True, blank=True)
     condicion_pelaje = models.CharField(max_length=100, blank=True)
     fecha_registro = models.DateField(auto_now_add=True)

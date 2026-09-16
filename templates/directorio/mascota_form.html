@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Registrar Mascota · Prados Pets{% endblock %}
+
+{% block body %}
+<div class="app-shell">
+  {% include "usuarios/_topbar.html" %}
+
+  <main class="app-content app-content--narrow">
+    <h1>Registrar Nueva Mascota</h1>
+
+    {% if messages %}
+    <ul class="app-messages">
+      {% for message in messages %}
+        <li class="app-messages__item app-messages__item--{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+    <form method="POST" class="app-form">
+      {% csrf_token %}
+
+      {{ form.as_p }}
+
+      <div class="app-form__actions">
+        <a href="{% url 'registrar_dueno' %}" class="btn btn--ghost">Registrar Dueño</a>
+        <button type="submit" class="btn btn--primary">Guardar Mascota</button>
+      </div>
+    </form>
+  </main>
+</div>
+{% endblock %}

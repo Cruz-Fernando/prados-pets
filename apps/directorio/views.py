@@ -2,6 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db import IntegrityError
+
+from apps.directorio.forms import MascotaForm
 from .models import Dueno
 
 
@@ -33,3 +35,15 @@ def registrar_dueno(request):
             })
 
     return render(request, 'directorio/dueno_form.html')
+
+def registrar_mascota(request):
+    if request.method == 'POST':
+        form = MascotaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_dueños') # O la ruta de éxito que prefieras
+    else:
+        form = MascotaForm()
+    
+    return render(request, 'directorio/mascota_form.html', {'form': form})
+

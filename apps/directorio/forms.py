@@ -10,8 +10,8 @@ class MascotaForm(forms.ModelForm):
             'nombre': forms.TextInput(attrs={'class': 'w-full border rounded p-2'}),
             'especie': forms.Select(attrs={'class': 'w-full border rounded p-2'}),
             'raza': forms.TextInput(attrs={'class': 'w-full border rounded p-2'}),
-            'tamano': forms.TextInput(attrs={'class': 'w-full border rounded p-2'}),
-            'sexo': forms.TextInput(attrs={'class': 'w-full border rounded p-2'}),
+            'tamano': forms.Select(attrs={'class': 'w-full border rounded p-2'}),
+            'sexo': forms.Select(attrs={'class': 'w-full border rounded p-2'}),
             'fecha_nacimiento': forms.DateInput(attrs={'type': 'date', 'class': 'w-full border rounded p-2'}),
             'condicion_pelaje': forms.TextInput(attrs={'class': 'w-full border rounded p-2'}),
         }

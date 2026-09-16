@@ -23,6 +23,7 @@
         </p>
         <div class="app-hero__actions">
           <a href="/directorio/registrar-dueno/" class="btn btn--primary">Registrar dueño</a>
+          <a href="/directorio/mascotas/registrar/" class="btn btn--primary">Registrar mascota</a>
           {% if es_administrador %}
           <a href="{% url 'usuarios:usuarios_lista' %}" class="btn btn--ghost">Usuarios y roles</a>
           {% endif %}
@@ -40,10 +41,17 @@
     </div>
 
     <div class="app-content__grid">
-      <a href="/directorio/registrar-dueno/" class="app-card">
-        <h2>Directorio</h2>
-        <p>Dueños y mascotas registradas.</p>
-      </a>
+      <!-- Única tarjeta de Directorio con subopciones -->
+      <div class="app-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <h2>Directorio</h2>
+          <p>Gestión de propietarios y pacientes de la clínica.</p>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 15px;">
+          <a href="/directorio/registrar-dueno/" class="btn btn--primary" style="font-size: 0.85rem; padding: 6px 12px; text-align: center; flex: 1;">Dueño</a>
+          <a href="/directorio/mascotas/registrar/" class="btn btn--primary" style="font-size: 0.85rem; padding: 6px 12px; text-align: center; flex: 1;">Mascota</a>
+        </div>
+      </div>
 
       {% if es_administrador %}
       <a href="{% url 'usuarios:usuarios_lista' %}" class="app-card">

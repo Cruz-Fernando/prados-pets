@@ -655,6 +655,33 @@ button {
   margin: 0;
 }
 
+/* ============================================================
+   Búsqueda (HU05)
+   ============================================================ */
+
+.app-search {
+  display: flex;
+  gap: 10px;
+  max-width: 480px;
+  margin-bottom: 28px;
+}
+
+.app-search .app-input {
+  flex: 1;
+}
+
+.app-search__section-title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 24px 0 10px;
+}
+
+.app-search__section-title:first-child {
+  margin-top: 0;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;

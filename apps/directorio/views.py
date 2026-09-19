@@ -2,9 +2,11 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db import IntegrityError
+from django.db.models import Q
+from django.http import JsonResponse
 
 from apps.directorio.forms import MascotaForm
-from .models import Dueno
+from .models import Dueno, Mascota
 
 
 @login_required
@@ -36,14 +38,67 @@ def registrar_dueno(request):
 
     return render(request, 'directorio/dueno_form.html')
 
+
+@login_required
 def registrar_mascota(request):
     if request.method == 'POST':
         form = MascotaForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('lista_dueños') # O la ruta de éxito que prefieras
+            messages.success(request, '¡Mascota registrada con éxito!')
+            return redirect('buscar_directorio')
     else:
         form = MascotaForm()
-    
+
     return render(request, 'directorio/mascota_form.html', {'form': form})
 
+
+@login_required
+def buscar_directorio(request):
+    """
+    HU05 — "Como recepcionista, quiero buscar un dueño o mascota,
+    para atenderlo rápidamente."
+
+    Sirve tanto la página completa (para GET normal / sin JS) como
+    respuestas JSON para la búsqueda en tiempo real vía fetch().
+    """
+    q = request.GET.get('q', '').strip()
+    duenos = Dueno.objects.none()
+    mascotas = Mascota.objects.none()
+
+    if q:
+        duenos = Dueno.objects.filter(
+            Q(nombre_completo__icontains=q) | Q(telefono__icontains=q)
+        ).order_by('nombre_completo')[:20]
+
+        mascotas = Mascota.objects.select_related('id_dueno').filter(
+            Q(nombre__icontains=q)
+            | Q(id_dueno__nombre_completo__icontains=q)
+            | Q(id_dueno__telefono__icontains=q)
+        ).order_by('nombre')[:20]
+
+    es_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+    if es_ajax:
+        return JsonResponse({
+            'duenos': [
+                {
+                    'id': d.id_dueno,
+                    'nombre_completo': d.nombre_completo,
+                    'telefono': d.telefono,
+                    'direccion': d.direccion,
+                }
+                for d in duenos
+            ],
+            'mascotas': [
+                {
+                    'id': m.id_mascota,
+                    'nombre': m.nombre,
+                    'especie': m.get_especie_display(),
+                    'dueno_nombre': m.id_dueno.nombre_completo,
+                    'dueno_telefono': m.id_dueno.telefono,
+                }
+                for m in mascotas
+            ],
+        })
+
+    return render(request, 'directorio/buscar.html', {'q': q, 'duenos': duenos, 'mascotas': mascotas})

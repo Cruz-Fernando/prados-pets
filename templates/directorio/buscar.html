@@ -2,9 +2,25 @@
 {% block title %}Buscar · Prados Pets{% endblock %}
 {% block body %}
 <div class="app-shell">
-  {% include "usuarios/_topbar.html" %}
+  {% include "usuarios/_sidebar.html" %}
 
-  <main class="app-content">
+  <div class="app-main">
+    <header class="app-topbar">
+      <button type="button" class="app-topbar__toggle" id="sidebar-toggle-btn" aria-label="Abrir menú">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <div class="app-topbar__breadcrumb">
+        <a href="{% url 'usuarios:dashboard' %}">Directorio</a>
+        <span class="app-topbar__sep">/</span>
+        <span class="app-topbar__current">Buscar</span>
+      </div>
+    </header>
+
+    <main class="app-content">
     <h1>Buscar dueño o mascota</h1>
     <p class="app-content__subtitle">Escribe un nombre, el nombre de una mascota o un teléfono — los resultados se actualizan mientras escribes.</p>
 
@@ -107,5 +123,7 @@
     return div.innerHTML;
   }
 })();
-</script>
+  </main>
+</div>
+</div>
 {% endblock %}

@@ -2,9 +2,19 @@
 {% block title %}{% if modo == "nuevo" %}Nuevo rol{% else %}Editar rol{% endif %} · Prados Pets{% endblock %}
 {% block body %}
 <div class="app-shell">
-  {% include "usuarios/_topbar.html" %}
+  {% include "usuarios/_sidebar.html" %}
 
-  <main class="app-content app-content--narrow">
+  <div class="app-main">
+    <header class="app-topbar">
+      <div class="app-topbar__breadcrumb">
+        <a href="{% url 'usuarios:dashboard' %}">Dashboard</a>
+        <span class="app-topbar__sep">›</span>
+        <a href="{% url 'usuarios:roles_lista' %}">Roles</a>
+        <span class="app-topbar__sep">›</span>
+        <span class="app-topbar__current">{% if modo == "nuevo" %}Nuevo rol{% else %}Editar rol{% endif %}</span>
+      </div>
+    </header>
+    <main class="app-content app-content--narrow">
     <h1>{% if modo == "nuevo" %}Nuevo rol{% else %}Editar rol{% endif %}</h1>
 
     {% if form.errors %}
@@ -26,6 +36,7 @@
         <button type="submit" class="btn btn--primary">Guardar</button>
       </div>
     </form>
-  </main>
+    </main>
+  </div>
 </div>
 {% endblock %}

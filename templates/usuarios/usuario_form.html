@@ -2,9 +2,19 @@
 {% block title %}Editar usuario · Prados Pets{% endblock %}
 {% block body %}
 <div class="app-shell">
-  {% include "usuarios/_topbar.html" %}
+  {% include "usuarios/_sidebar.html" %}
 
-  <main class="app-content app-content--narrow">
+  <div class="app-main">
+    <header class="app-topbar">
+      <div class="app-topbar__breadcrumb">
+        <a href="{% url 'usuarios:dashboard' %}">Dashboard</a>
+        <span class="app-topbar__sep">›</span>
+        <a href="{% url 'usuarios:usuarios_lista' %}">Usuarios</a>
+        <span class="app-topbar__sep">›</span>
+        <span class="app-topbar__current">Editar usuario</span>
+      </div>
+    </header>
+    <main class="app-content app-content--narrow">
     <h1>{{ usuario.nombre_completo|default:usuario.username }}</h1>
     <p class="app-content__subtitle">@{{ usuario.username }}</p>
 
@@ -27,6 +37,7 @@
         <button type="submit" class="btn btn--primary">Guardar</button>
       </div>
     </form>
-  </main>
+    </main>
+  </div>
 </div>
 {% endblock %}

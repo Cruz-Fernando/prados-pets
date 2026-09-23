@@ -865,6 +865,33 @@ button {
    Formularios Internos
    ============================================================ */
 
+.app-input {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 11px 13px;
+  font-size: 14px;
+  font-family: var(--font-ui);
+  color: var(--text);
+  background: var(--surface-alt);
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.app-input:focus {
+  border-color: var(--accent);
+  background: #20172e;
+  outline: none;
+}
+
+.app-search {
+  display: flex;
+  gap: 10px;
+}
+
+.app-search .app-input {
+  flex: 1;
+  min-width: 0;
+}
+
 .app-form {
   max-width: 440px;
   display: flex;

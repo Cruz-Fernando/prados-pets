@@ -54,6 +54,29 @@ def registrar_mascota(request):
 
 
 @login_required
+def autocomplete_duenos(request):
+    """
+    Devuelve una lista JSON de dueños que coincidan con el término buscado.
+    Usado por el widget de autocomplete en el formulario de mascota.
+    """
+    q = request.GET.get('q', '').strip()
+    resultados = []
+    if q:
+        duenos = Dueno.objects.filter(
+            Q(nombre_completo__icontains=q) | Q(telefono__icontains=q)
+        ).order_by('nombre_completo')[:10]
+        resultados = [
+            {
+                'id': d.id_dueno,
+                'texto': f"{d.nombre_completo} — {d.telefono}",
+            }
+            for d in duenos
+        ]
+    return JsonResponse({'resultados': resultados})
+
+
+
+@login_required
 def buscar_directorio(request):
     """
     HU05 — "Como recepcionista, quiero buscar un dueño o mascota,

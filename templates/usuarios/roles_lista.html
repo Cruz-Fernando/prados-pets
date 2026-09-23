@@ -2,9 +2,19 @@
 {% block title %}Roles · Prados Pets{% endblock %}
 {% block body %}
 <div class="app-shell">
-  {% include "usuarios/_topbar.html" %}
+  {% include "usuarios/_sidebar.html" %}
 
-  <main class="app-content">
+  <div class="app-main">
+    <header class="app-topbar">
+      <div class="app-topbar__breadcrumb">
+        <a href="{% url 'usuarios:dashboard' %}">Dashboard</a>
+        <span class="app-topbar__sep">›</span>
+        <span class="app-topbar__current">Usuarios y Roles</span>
+        <span class="app-topbar__sep">›</span>
+        <span class="app-topbar__current">Roles</span>
+      </div>
+    </header>
+    <main class="app-content">
     <div class="app-toolbar">
       <h1>Roles</h1>
       <a href="{% url 'usuarios:rol_nuevo' %}" class="btn btn--primary">Nuevo rol</a>
@@ -46,6 +56,7 @@
         {% endfor %}
       </tbody>
     </table>
-  </main>
+    </main>
+  </div>
 </div>
 {% endblock %}

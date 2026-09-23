@@ -2,37 +2,54 @@
 {% block title %}Registrar Dueño · Prados Pets{% endblock %}
 {% block body %}
 <div class="app-shell">
-  {% include "usuarios/_topbar.html" %}
+  {% include "usuarios/_sidebar.html" %}
 
-  <main class="app-content app-content--narrow">
-    <h1>Registrar Nuevo Dueño</h1>
-
-    {% if messages %}
-    <ul class="app-messages">
-      {% for message in messages %}
-        <li class="app-messages__item app-messages__item--{{ message.tags }}">{{ message }}</li>
-      {% endfor %}
-    </ul>
-    {% endif %}
-
-    <form method="POST" class="app-form">
-      {% csrf_token %}
-
-      <label for="nombre">Nombre Completo</label>
-      <input type="text" id="nombre" name="nombre" class="app-input" value="{{ nombre|default:'' }}" required>
-
-      <label for="telefono">Teléfono</label>
-      <input type="text" id="telefono" name="telefono" class="app-input" value="{{ telefono|default:'' }}" required>
-
-      <label for="direccion">Dirección</label>
-      <input type="text" id="direccion" name="direccion" class="app-input" value="{{ direccion|default:'' }}" required>
-
-      <div class="app-form__actions">
-        <a href="{% url 'usuarios:dashboard' %}" class="btn btn--ghost">Cancelar</a>
-        <a href="{% url 'registrar_mascota' %}" class="btn btn--ghost">Registrar Mascota</a>
-        <button type="submit" class="btn btn--primary">Guardar Dueño</button>
+  <div class="app-main">
+    <header class="app-topbar">
+      <div class="app-topbar__breadcrumb">
+        <a href="{% url 'usuarios:dashboard' %}">Dashboard</a>
+        <span class="app-topbar__sep">›</span>
+        <span class="app-topbar__current">Directorio</span>
+        <span class="app-topbar__sep">›</span>
+        <span class="app-topbar__current">Registrar Dueño</span>
       </div>
-    </form>
-  </main>
+    </header>
+
+    <main class="app-content app-content--narrow">
+      <div class="app-toolbar">
+        <div>
+          <h1>Registrar Dueño</h1>
+          <p class="app-content__subtitle">Ingresa los datos del propietario de la mascota.</p>
+        </div>
+      </div>
+
+      {% if messages %}
+      <ul class="app-messages">
+        {% for message in messages %}
+          <li class="app-messages__item app-messages__item--{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+      <form method="POST" class="app-form" id="form-dueno">
+        {% csrf_token %}
+
+        <label for="nombre">Nombre Completo</label>
+        <input type="text" id="nombre" name="nombre" class="app-input" value="{{ nombre|default:'' }}" required>
+
+        <label for="telefono">Teléfono</label>
+        <input type="text" id="telefono" name="telefono" class="app-input" value="{{ telefono|default:'' }}" required>
+
+        <label for="direccion">Dirección</label>
+        <input type="text" id="direccion" name="direccion" class="app-input" value="{{ direccion|default:'' }}" required>
+
+        <div class="app-form__actions">
+          <a href="{% url 'usuarios:dashboard' %}" class="btn btn--ghost" id="btn-cancel-dueno">Cancelar</a>
+          <a href="{% url 'registrar_mascota' %}" class="btn btn--ghost" id="btn-go-mascota">Registrar Mascota</a>
+          <button type="submit" class="btn btn--primary" id="btn-save-dueno">Guardar Dueño</button>
+        </div>
+      </form>
+    </main>
+  </div>
 </div>
 {% endblock %}

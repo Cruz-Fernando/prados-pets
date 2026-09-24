@@ -102,3 +102,21 @@ def buscar_directorio(request):
         })
 
     return render(request, 'directorio/buscar.html', {'q': q, 'duenos': duenos, 'mascotas': mascotas})
+
+
+@login_required
+def autocomplete_duenos(request):
+    q = request.GET.get('q', '').strip()
+    resultados = []
+    if q:
+        duenos = Dueno.objects.filter(
+            Q(nombre_completo__icontains=q) | Q(telefono__icontains=q)
+        ).order_by('nombre_completo')[:15]
+        for d in duenos:
+            texto = f"{d.nombre_completo} ({d.telefono})" if d.telefono else d.nombre_completo
+            resultados.append({
+                'id': d.id_dueno,
+                'texto': texto,
+            })
+    return JsonResponse({'resultados': resultados})
+

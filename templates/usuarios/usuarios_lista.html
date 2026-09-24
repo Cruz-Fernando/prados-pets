@@ -57,6 +57,9 @@
           <td><span class="badge badge--{{ u.estado }}">{{ u.estado }}</span></td>
           <td class="app-table__actions">
             <a href="{% url 'usuarios:usuario_editar' u.pk %}">Editar</a>
+            {% if u != user %}
+              <a href="{% url 'usuarios:usuario_eliminar' u.pk %}" style="color: var(--error); margin-left: 10px;">Eliminar</a>
+            {% endif %}
           </td>
         </tr>
         {% empty %}

@@ -44,9 +44,13 @@ def registrar_mascota(request):
     if request.method == 'POST':
         form = MascotaForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, '¡Mascota registrada con éxito!')
-            return redirect('buscar_directorio')
+            try:
+                form.save()
+            except IntegrityError:
+                form.add_error(None, 'No se pudo guardar la mascota. El registro generado ya existe o hay un conflicto con los datos. Intenta nuevamente.')
+            else:
+                messages.success(request, '¡Mascota registrada con éxito!')
+                return redirect('buscar_directorio')
     else:
         form = MascotaForm()
 

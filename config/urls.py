@@ -10,4 +10,5 @@ urlpatterns = [
     path('', RedirectView.as_view(pattern_name='usuarios:dashboard'), name='home'),
     path('', include('apps.usuarios.urls')),
     path('directorio/', include('apps.directorio.urls')),
+    path('agendamiento/', include('apps.agendamiento.urls')),
 ]

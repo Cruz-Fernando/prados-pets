@@ -1,0 +1,115 @@
+<div class="form-row-2">
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Agendar Cita · Prados Pets{% endblock %}
+
+{% block body %}
+<div class="app-shell">
+  {% include "usuarios/_sidebar.html" %}
+
+  <div class="app-main">
+    <header class="app-topbar">
+      <button type="button" class="app-topbar__toggle" id="sidebar-toggle-btn" aria-label="Abrir menú">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <div class="app-topbar__breadcrumb">
+        <a href="{% url 'usuarios:dashboard' %}">Dashboard</a>
+        <span class="app-topbar__sep">›</span>
+        <span class="app-topbar__current">Citas</span>
+        <span class="app-topbar__sep">›</span>
+        <span class="app-topbar__current">Agendar Cita</span>
+      </div>
+    </header>
+
+    <main class="app-content app-content--narrow">
+      <h1>Agendar Cita</h1>
+      <p class="app-content__subtitle">Asigna fecha, hora y veterinario para la consulta.</p>
+
+      {% if messages %}
+      <ul class="app-messages">
+        {% for message in messages %}
+          <li class="app-messages__item app-messages__item--{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+      {% if form.non_field_errors %}
+        <ul class="app-messages">
+          {% for error in form.non_field_errors %}
+            <li class="app-messages__item app-messages__item--error">{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      <form method="POST" class="app-form" novalidate>
+        {% csrf_token %}
+
+        <div class="form-field">
+          <label for="{{ form.mascota.id_for_label }}" class="form-label">Mascota *</label>
+          {{ form.mascota }}
+          {% for e in form.mascota.errors %}<p class="app-form__field-error">{{ e }}</p>{% endfor %}
+        </div>
+
+        <div class="form-field">
+          <label for="{{ form.veterinario.id_for_label }}" class="form-label">Veterinario *</label>
+          {{ form.veterinario }}
+          {% for e in form.veterinario.errors %}<p class="app-form__field-error">{{ e }}</p>{% endfor %}
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-field">
+            <label for="{{ form.fecha.id_for_label }}" class="form-label">Fecha *</label>
+            {{ form.fecha }}
+            {% for e in form.fecha.errors %}<p class="app-form__field-error">{{ e }}</p>{% endfor %}
+          </div>
+          <div class="form-field">
+            <label for="{{ form.hora_inicio.id_for_label }}" class="form-label">Hora inicio *</label>
+            {{ form.hora_inicio }}
+            {% for e in form.hora_inicio.errors %}<p class="app-form__field-error">{{ e }}</p>{% endfor %}
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="{{ form.hora_fin.id_for_label }}" class="form-label">Hora fin</label>
+          {{ form.hora_fin }}
+          {% for e in form.hora_fin.errors %}<p class="app-form__field-error">{{ e }}</p>{% endfor %}
+        </div>
+
+        <div class="form-field">
+          <label for="{{ form.tipo_servicio.id_for_label }}" class="form-label">Tipo de servicio</label>
+          {{ form.tipo_servicio }}
+        </div>
+
+        <div class="app-form__actions">
+          <a href="{% url 'usuarios:dashboard' %}" class="btn btn--ghost">Cancelar</a>
+          <button type="submit" class="btn btn--primary">Guardar Cita</button>
+        </div>
+      </form>
+    </main>
+  </div>
+</div>
+
+<style>
+.form-field { display: flex; flex-direction: column; margin-top: 18px; }
+.form-field:first-child { margin-top: 0; }
+.form-label { font-size: 13px; font-weight: 500; color: var(--text-muted); margin-bottom: 6px; }
+.form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 18px; }
+select, input[type="date"], input[type="time"], input[type="text"] {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 11px 13px;
+  font-size: 14px;
+  font-family: var(--font-ui);
+  color: var(--text);
+  background: var(--surface-alt);
+  width: 100%;
+  box-sizing: border-box;
+}
+@media (max-width: 600px) { .form-row-2 { grid-template-columns: 1fr; } }
+</style>
+{% endblock %}

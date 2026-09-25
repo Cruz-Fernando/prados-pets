@@ -1,6 +1,6 @@
 """
-Settings de producción — PostgreSQL en el VPS, DEBUG desactivado.
-Se activa a partir de E2. Todas las credenciales salen de variables de entorno,
+Settings de producción — PostgreSQL en la nube, DEBUG desactivado.
+Todas las credenciales salen de variables de entorno,
 nunca se escriben aquí directamente.
 """
 
@@ -24,6 +24,9 @@ DATABASES = {
         "PORT": os.environ.get("DB_PORT", "5432"),
     }
 }
+
+# Whitenoise sirve los archivos estáticos sin necesitar Nginx
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True

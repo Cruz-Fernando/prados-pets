@@ -36,6 +36,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # sirve estáticos en producción
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -82,12 +83,10 @@ DATABASES = {
         'NAME': os.environ.get('DB_NAME', 'postgres'),
         'USER': os.environ.get('DB_USER'),
         'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),  # Forzamos la lectura de aws-0-sa-east-1.pooler.supabase.com
+        'HOST': os.environ.get('DB_HOST'),
         'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
-
-# config/settings/base.py
 
 STATIC_URL = 'static/'
 
@@ -101,8 +100,6 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Usamos nuestro propio modelo de Usuario (apps.usuarios) en vez del User
-# por defecto de Django, para poder agregarle rol, teléfono y estado.
 AUTH_USER_MODEL = "usuarios.Usuario"
 
 LOGIN_URL = "usuarios:login"

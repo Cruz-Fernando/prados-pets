@@ -76,6 +76,17 @@ TIME_ZONE = "America/Bogota"
 USE_I18N = True
 USE_TZ = True
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME', 'postgres'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),  # Forzamos la lectura de aws-0-sa-east-1.pooler.supabase.com
+        'PORT': os.environ.get('DB_PORT', '5432'),
+    }
+}
+
 # config/settings/base.py
 
 STATIC_URL = 'static/'

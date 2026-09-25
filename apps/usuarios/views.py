@@ -116,3 +116,23 @@ def usuario_editar(request, pk):
     return render(
         request, "usuarios/usuario_form.html", {"form": form, "usuario": usuario}
     )
+
+
+@login_required
+@rol_requerido("administrador")
+def usuario_eliminar(request, pk):
+    usuario = get_object_or_404(Usuario, pk=pk)
+    if usuario == request.user:
+        messages.error(request, "No puedes eliminar tu propia cuenta de usuario.")
+        return redirect("usuarios:usuarios_lista")
+
+    if request.method == "POST":
+        nombre = usuario.username
+        usuario.delete()
+        messages.success(request, f"Usuario '{nombre}' eliminado correctamente.")
+        return redirect("usuarios:usuarios_lista")
+
+    return render(
+        request, "usuarios/usuario_confirmar_eliminar.html", {"usuario": usuario}
+    )
+

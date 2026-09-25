@@ -20,7 +20,7 @@ def agendar_cita(request):
         form = CitaForm(request.POST)
         if form.is_valid():
             try:
-                form.save()
+                cita = form.save()
             except IntegrityError:
                 form.add_error(
                     None,
@@ -28,7 +28,8 @@ def agendar_cita(request):
                 )
             else:
                 messages.success(request, "¡Cita agendada con éxito!")
-                return redirect("agendamiento:agendar_cita")
+                # Redirigir al PDF del comprobante recién creado
+                return redirect("agendamiento:cita_pdf", pk=cita.pk)
     else:
         form = CitaForm()
 
@@ -73,7 +74,7 @@ def cita_pdf(request, pk):
     """
     HU06-fix: Reporte PDF de una cita.
     Si WeasyPrint está instalado devuelve PDF descargable;
-    si no, devuelve HTML con botón window.print().
+    si no, muestra HTML imprimible en el navegador.
     """
     cita = get_object_or_404(Cita, pk=pk)
     contexto = {
@@ -96,4 +97,5 @@ def cita_pdf(request, pk):
         )
         return response
     except ImportError:
+        # WeasyPrint no instalado: renderizar HTML imprimible
         return HttpResponse(html_str)

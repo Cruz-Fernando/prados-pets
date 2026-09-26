@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Editar usuario · Prados Pets{% endblock %}
+{% block title %}Eliminar usuario · Prados Pets{% endblock %}
 {% block body %}
 <div class="app-shell">
   {% include "usuarios/_sidebar.html" %}
@@ -18,30 +18,25 @@
         <span class="app-topbar__sep">›</span>
         <a href="{% url 'usuarios:usuarios_lista' %}">Usuarios</a>
         <span class="app-topbar__sep">›</span>
-        <span class="app-topbar__current">Editar usuario</span>
+        <span class="app-topbar__current">Eliminar usuario</span>
       </div>
     </header>
     <main class="app-content app-content--narrow">
-    <h1>{{ usuario.nombre_completo|default:usuario.username }}</h1>
-    <p class="app-content__subtitle">@{{ usuario.username }}</p>
+    <h1 style="color: var(--error);">Eliminar usuario</h1>
+    <p class="app-content__subtitle">
+      ¿Estás seguro de que deseas eliminar al usuario <strong>{{ usuario.username }}</strong> ({{ usuario.nombre_completo|default:"Sin nombre" }})?
+    </p>
 
-    {% if form.errors %}
-      <p class="auth-form__error">Revisa los datos del formulario.</p>
-    {% endif %}
+    <div class="auth-card__error" style="margin: 20px 0;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Esta acción es permanente y eliminará el acceso del usuario al sistema.
+    </div>
 
     <form method="post" class="app-form">
       {% csrf_token %}
-
-      <label for="{{ form.id_rol.id_for_label }}">Rol</label>
-      {{ form.id_rol }}
-
-      <label for="{{ form.estado.id_for_label }}">Estado</label>
-      {{ form.estado }}
-      <p class="app-form__hint">{{ form.estado.help_text }}</p>
-
       <div class="app-form__actions">
         <a href="{% url 'usuarios:usuarios_lista' %}" class="btn btn--ghost">Cancelar</a>
-        <button type="submit" class="btn btn--primary">Guardar</button>
+        <button type="submit" class="btn btn--danger">Confirmar eliminación</button>
       </div>
     </form>
     </main>

@@ -11,5 +11,4 @@ urlpatterns = [
     path('', include('apps.usuarios.urls')),
     path('directorio/', include('apps.directorio.urls')),
     path('agendamiento/', include('apps.agendamiento.urls')),
-    path('peluqueria/', include('apps.peluqueria.urls')),
 ]

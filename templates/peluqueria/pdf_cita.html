@@ -1,99 +1,159 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Comprobante de Peluquería - {{ mascota.nombre }}</title>
-    <style>
-        @page {
-            size: a5 portrait;
-            margin: 2cm;
-        }
-        body { 
-            font-family: Helvetica, sans-serif; 
-            color: #333; 
-            font-size: 13px;
-        }
-        .header { 
-            text-align: center; 
-            border-bottom: 2px solid #7c3aed; 
-            padding-bottom: 15px; 
-            margin-bottom: 25px; 
-        }
-        .logo-text { 
-            font-size: 24px; 
-            font-weight: bold; 
-            color: #7c3aed; 
-        }
-        .title { 
-            font-size: 16px; 
-            margin-top: 5px; 
-            color: #666; 
-        }
-        .info-table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            margin-bottom: 20px; 
-        }
-        .info-table th, .info-table td { 
-            padding: 10px; 
-            border-bottom: 1px solid #eee; 
-            text-align: left; 
-        }
-        .info-table th { 
-            width: 35%; 
-            color: #555; 
-        }
-        .footer { 
-            text-align: center; 
-            margin-top: 40px; 
-            font-size: 11px; 
-            color: #999; 
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Comprobante Peluquería – {{ mascota.nombre }}</title>
+  <style>
+    @page {
+      size: A5 portrait;
+      margin: 1.2cm 1.4cm;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 11px;
+      color: #2d2d2d;
+      background: #fff;
+    }
+    .header {
+      background: #6d28d9;
+      color: #fff;
+      padding: 14px 16px 12px;
+      border-radius: 6px 6px 0 0;
+    }
+    .header-top { display: table; width: 100%; }
+    .brand { display: table-cell; vertical-align: middle; }
+    .brand-name { font-size: 20px; font-weight: bold; letter-spacing: 0.5px; }
+    .brand-sub { font-size: 9px; opacity: 0.85; margin-top: 2px; }
+    .doc-label { display: table-cell; vertical-align: middle; text-align: right; }
+    .doc-label span {
+      background: rgba(255,255,255,0.18);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 9.5px;
+    }
+    .divider {
+      height: 3px;
+      background: #7c3aed;
+      margin-bottom: 14px;
+    }
+    .section-title {
+      font-size: 8.5px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #6d28d9;
+      border-bottom: 1px solid #ede9fe;
+      padding-bottom: 3px;
+      margin-bottom: 8px;
+    }
+    .two-col { display: table; width: 100%; margin-bottom: 12px; }
+    .col { display: table-cell; vertical-align: top; width: 50%; }
+    .col:first-child { padding-right: 10px; }
+    .row { display: table; width: 100%; margin-bottom: 5px; }
+    .lbl { display: table-cell; color: #888; font-size: 9px; width: 38%; padding-right: 4px; }
+    .val { display: table-cell; font-weight: 600; font-size: 10.5px; color: #1a1a1a; }
+    .badge {
+      display: inline-block;
+      background: #ede9fe;
+      color: #5b21b6;
+      border-radius: 10px;
+      padding: 1px 8px;
+      font-size: 9px;
+      font-weight: bold;
+    }
+    .service-box {
+      background: #faf5ff;
+      border-left: 3px solid #7c3aed;
+      border-radius: 0 4px 4px 0;
+      padding: 8px 12px;
+      margin-bottom: 12px;
+    }
+    .service-name { font-size: 13px; font-weight: bold; color: #5b21b6; }
+    .service-meta { display: table; width: 100%; margin-top: 5px; }
+    .service-meta-item { display: table-cell; font-size: 9.5px; color: #555; }
+    .service-meta-item strong { color: #2d2d2d; }
+    .price-row {
+      display: table;
+      width: 100%;
+      background: #6d28d9;
+      border-radius: 4px;
+      padding: 8px 12px;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+    .price-lbl { display: table-cell; font-size: 10px; vertical-align: middle; }
+    .price-val { display: table-cell; text-align: right; font-size: 16px; font-weight: bold; vertical-align: middle; }
+    .obs-box {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      padding: 7px 10px;
+      font-size: 10px;
+      color: #444;
+      min-height: 28px;
+      margin-bottom: 12px;
+    }
+    .footer {
+      border-top: 1px solid #ede9fe;
+      padding-top: 8px;
+      text-align: center;
+      font-size: 9px;
+      color: #aaa;
+    }
+    .footer strong { color: #7c3aed; }
+  </style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo-text">Prados Pets</div>
-        <div class="title">Comprobante de Spa y Peluquería Canina</div>
+  <div class="header">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-name">Prados Pets</div>
+        <div class="brand-sub">Clínica Veterinaria &amp; Spa Canino</div>
+      </div>
+      <div class="doc-label"><span>Comprobante de Peluquería</span></div>
     </div>
+  </div>
+  <div class="divider"></div>
 
-    <table class="info-table">
-        <tr>
-            <th>Mascota:</th>
-            <td><strong>{{ mascota.nombre }}</strong></td>
-        </tr>
-        <tr>
-            <th>Propietario:</th>
-            <td>{{ mascota.id_dueno }}</td>
-        </tr>
-        <tr>
-            <th>Raza:</th>
-            <td>{{ mascota.raza }}</td>
-        </tr>
-        <tr>
-            <th>Servicio:</th>
-            <td>{{ cita.get_servicio_display }}</td>
-        </tr>
-        <tr>
-            <th>Fecha y Hora:</th>
-            <td>{{ cita.fecha_hora|date:"d/m/Y H:i" }}</td>
-        </tr>
-        <tr>
-            <th>Duración Estimada:</th>
-            <td>{{ cita.duracion_texto }} ({{ cita.duracion_estimada_min }} mins)</td>
-        </tr>
-        <tr>
-            <th>Precio:</th>
-            <td><strong>{{ cita.precio_formateado }}</strong></td>
-        </tr>
-        <tr>
-            <th>Observaciones:</th>
-            <td>{{ cita.observaciones|default:"Ninguna observación adicional." }}</td>
-        </tr>
-    </table>
-
-    <div class="footer">
-        <p>Gracias por confiar en Prados Pets para el cuidado de {{ mascota.nombre }}.</p>
+  <div class="two-col">
+    <div class="col">
+      <div class="section-title">Datos de la Mascota</div>
+      <div class="row"><span class="lbl">Nombre</span><span class="val">{{ mascota.nombre }}</span></div>
+      <div class="row"><span class="lbl">Tipo</span><span class="val"><span class="badge">{{ mascota.get_especie_display }}</span></span></div>
+      <div class="row"><span class="lbl">Raza</span><span class="val">{{ mascota.raza|default:"No especificada" }}</span></div>
+      <div class="row"><span class="lbl">Tamaño</span><span class="val">{{ cita.tamano|capfirst }}</span></div>
     </div>
+    <div class="col">
+      <div class="section-title">Datos del Propietario</div>
+      <div class="row"><span class="lbl">Nombre</span><span class="val">{{ mascota.id_dueno.nombre_completo }}</span></div>
+      <div class="row"><span class="lbl">Teléfono</span><span class="val">{{ mascota.id_dueno.telefono }}</span></div>
+      <div class="row"><span class="lbl">Dirección</span><span class="val">{{ mascota.id_dueno.direccion|default:"-" }}</span></div>
+      <div class="row"><span class="lbl">Código</span><span class="val">{{ mascota.codigo_mascota }}</span></div>
+    </div>
+  </div>
+
+  <div class="section-title">Servicio Agendado</div>
+  <div class="service-box">
+    <div class="service-name">{{ cita.get_servicio_display }}</div>
+    <div class="service-meta">
+      <div class="service-meta-item">Fecha: <strong>{{ cita.fecha_hora|date:"d/m/Y" }}</strong></div>
+      <div class="service-meta-item">Hora: <strong>{{ cita.fecha_hora|date:"H:i" }}</strong></div>
+      <div class="service-meta-item">Duración: <strong>{{ cita.duracion_estimada_min }} min</strong></div>
+    </div>
+  </div>
+
+  <div class="price-row">
+    <span class="price-lbl">Total a pagar</span>
+    <span class="price-val">{{ cita.precio_formateado }}</span>
+  </div>
+
+  <div class="section-title">Observaciones</div>
+  <div class="obs-box">{{ cita.observaciones|default:"Sin observaciones adicionales." }}</div>
+
+  <div class="footer">
+    Gracias por confiar en <strong>Prados Pets</strong> para el cuidado de {{ mascota.nombre }}.
+    Este comprobante es válido como recibo de agendamiento.
+  </div>
 </body>
 </html>

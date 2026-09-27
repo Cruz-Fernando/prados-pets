@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Comprobante de Peluquería - {{ mascota.nombre }}</title>
+    <style>
+        @page {
+            size: a5 portrait;
+            margin: 2cm;
+        }
+        body { 
+            font-family: Helvetica, sans-serif; 
+            color: #333; 
+            font-size: 13px;
+        }
+        .header { 
+            text-align: center; 
+            border-bottom: 2px solid #7c3aed; 
+            padding-bottom: 15px; 
+            margin-bottom: 25px; 
+        }
+        .logo-text { 
+            font-size: 24px; 
+            font-weight: bold; 
+            color: #7c3aed; 
+        }
+        .title { 
+            font-size: 16px; 
+            margin-top: 5px; 
+            color: #666; 
+        }
+        .info-table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-bottom: 20px; 
+        }
+        .info-table th, .info-table td { 
+            padding: 10px; 
+            border-bottom: 1px solid #eee; 
+            text-align: left; 
+        }
+        .info-table th { 
+            width: 35%; 
+            color: #555; 
+        }
+        .footer { 
+            text-align: center; 
+            margin-top: 40px; 
+            font-size: 11px; 
+            color: #999; 
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-text">Prados Pets</div>
+        <div class="title">Comprobante de Spa y Peluquería Canina</div>
+    </div>
+
+    <table class="info-table">
+        <tr>
+            <th>Mascota:</th>
+            <td><strong>{{ mascota.nombre }}</strong></td>
+        </tr>
+        <tr>
+            <th>Propietario:</th>
+            <td>{{ mascota.id_dueno }}</td>
+        </tr>
+        <tr>
+            <th>Raza:</th>
+            <td>{{ mascota.raza }}</td>
+        </tr>
+        <tr>
+            <th>Servicio:</th>
+            <td>{{ cita.get_servicio_display }}</td>
+        </tr>
+        <tr>
+            <th>Fecha y Hora:</th>
+            <td>{{ cita.fecha_hora|date:"d/m/Y H:i" }}</td>
+        </tr>
+        <tr>
+            <th>Duración Estimada:</th>
+            <td>{{ cita.duracion_texto }} ({{ cita.duracion_estimada_min }} mins)</td>
+        </tr>
+        <tr>
+            <th>Precio:</th>
+            <td><strong>{{ cita.precio_formateado }}</strong></td>
+        </tr>
+        <tr>
+            <th>Observaciones:</th>
+            <td>{{ cita.observaciones|default:"Ninguna observación adicional." }}</td>
+        </tr>
+    </table>
+
+    <div class="footer">
+        <p>Gracias por confiar en Prados Pets para el cuidado de {{ mascota.nombre }}.</p>
+    </div>
+</body>
+</html>

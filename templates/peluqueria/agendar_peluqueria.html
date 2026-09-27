@@ -1,71 +1,202 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load static %}
 {% block title %}Agendar Peluquería · Prados Pets{% endblock %}
 
 {% block body %}
 <div class="app-shell">
-  {% include "usuarios/_topbar.html" %}
+  {% include "usuarios/_sidebar.html" %}
 
-  <main class="app-content">
-    <div style="max-width: 650px; margin: 2rem auto; padding: 2rem; background: #1e1e2d; border: 1px solid #2d2d44; border-radius: 12px; color: #fff;">
-      <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem; color: #a78bfa;">HU07: Agendamiento de Peluquería y Spa</h2>
-      <p style="color: #94a3b8; font-size: 0.875rem; margin-bottom: 1.5rem;">RF25: Registro de cita con estimación automática de tiempo.</p>
+  <div class="app-main">
+    <!-- Topbar superior -->
+    <header class="app-topbar">
+      <button type="button" class="app-topbar__toggle" id="sidebar-toggle-btn" aria-label="Abrir menú">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <div class="app-topbar__breadcrumb">
+        <a href="{% url 'usuarios:dashboard' %}">Dashboard</a>
+        <span class="app-topbar__sep">›</span>
+        <span class="app-topbar__current">Agendar Peluquería</span>
+      </div>
+    </header>
 
-      {% if messages %}
-        <ul class="app-messages" style="margin-bottom: 1.5rem;">
-          {% for message in messages %}
-            <li class="app-messages__item app-messages__item--{{ message.tags }}">{{ message }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
+    <main class="app-content" style="display: flex; align-items: center; justify-content: center; padding: 2rem; min-height: calc(100vh - 70px);">
+      <div style="width: 100%; max-width: 650px; background: #1e1e2d; border: 1px solid #2d2d44; border-radius: 12px; padding: 2.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.3); color: #fff;">
+        <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem; color: #a78bfa;">Agendamiento de Peluquería y Spa</h2>
+        <p style="color: #94a3b8; font-size: 0.875rem; margin-bottom: 1.5rem;">Registro de cita con estimación automática de tiempo.</p>
 
-      <form method="POST" style="display: flex; flex-direction: column; gap: 1.25rem;">
-        {% csrf_token %}
+        {% if messages %}
+          <ul class="app-messages" style="margin-bottom: 1.5rem; list-style: none; padding: 0;">
+            {% for message in messages %}
+              <li class="app-messages__item app-messages__item--{{ message.tags }}" style="padding: 0.75rem; border-radius: 6px; background: rgba(239, 68, 68, 0.2); color: #fca5a5;">{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
 
-        <div>
-          <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem; color: #cbd5e1;">Nombre de la Mascota</label>
-          <input type="text" name="nombre_mascota" required style="width: 100%; padding: 0.75rem; background: #13131f; border: 1px solid #3f3f5a; border-radius: 8px; color: #fff; outline: none;">
-        </div>
+        <form action="{% url 'peluqueria:guardar_cita' %}" method="POST" style="display: flex; flex-direction: column; gap: 1.25rem;">
+          {% csrf_token %}
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-          <div>
-            <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem; color: #cbd5e1;">Raza</label>
-            <input type="text" name="raza" required style="width: 100%; padding: 0.75rem; background: #13131f; border: 1px solid #3f3f5a; border-radius: 8px; color: #fff; outline: none;">
+          <!-- Buscador de mascota por texto libre (AJAX) -->
+          <div class="form-field" style="position: relative;">
+            <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem; color: #cbd5e1;">Mascota *</label>
+            <div class="mascota-search-wrap" style="position:relative;">
+              <input type="text" id="buscar_mascota_input" placeholder="Escribe el nombre de la mascota..." autocomplete="off" required style="width: 100%; padding: 0.75rem; background: #13131f; border: 1px solid #3f3f5a; border-radius: 8px; color: #fff; outline: none; box-sizing: border-box;">
+              
+              <!-- Dropdown de resultados -->
+              <div id="mascota-dropdown" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: #1a1a2e; border: 1px solid #3f3f5a; border-radius: 8px; z-index: 100; max-height: 200px; overflow-y: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.3);"></div>
+            </div>
+            
+            <!-- ID oculto que se envía al backend -->
+            <input type="hidden" name="mascota_id" id="id_mascota_hidden" required>
           </div>
-          <div>
-            <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem; color: #cbd5e1;">Tamaño de la Mascota</label>
-            <select name="tamano" required style="width: 100%; padding: 0.75rem; background: #13131f; border: 1px solid #3f3f5a; border-radius: 8px; color: #fff; outline: none;">
-              <option value="PEQUENO">Pequeño (1 - 10 kg)</option>
-              <option value="MEDIANO" selected>Mediano (11 - 25 kg)</option>
-              <option value="GRANDE">Grande (Más de 25 kg)</option>
-            </select>
+
+          <!-- Información autocompletada de la mascota y dueño -->
+          <div id="info-mascota-box" style="display: none; background: #13131f; border: 1px solid #2d2d44; padding: 1rem; border-radius: 8px; font-size: 0.875rem; color: #94a3b8;">
+            <p style="margin: 0 0 0.25rem 0; color: #e2e8f0;"><strong style="color: #a78bfa;">Dueño:</strong> <span id="lbl_dueno"></span></p>
+            <p style="margin: 0 0 0.25rem 0; color: #e2e8f0;"><strong style="color: #a78bfa;">Raza:</strong> <span id="lbl_raza"></span></p>
+            <p style="margin: 0; color: #e2e8f0;"><strong style="color: #a78bfa;">Tamaño:</strong> <span id="lbl_tamano_texto"></span></p>
           </div>
-        </div>
 
-        <div>
-          <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem; color: #cbd5e1;">Tipo de Servicio</label>
-          <select name="servicio" required style="width: 100%; padding: 0.75rem; background: #13131f; border: 1px solid #3f3f5a; border-radius: 8px; color: #fff; outline: none;">
-            <option value="BANO">Baño e higiene básica</option>
-            <option value="CORTE">Corte de pelo y peinado</option>
-            <option value="COMPLETO">Baño, Corte y Spa completo</option>
-          </select>
-        </div>
+          <!-- Campos ocultos para enviar al backend raza y tamaño -->
+          <input type="hidden" name="raza" id="id_raza">
+          <input type="hidden" name="tamano" id="id_tamano">
 
-        <div>
-          <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem; color: #cbd5e1;">Fecha y Hora de la Cita</label>
-          <input type="datetime-local" name="fecha_hora" required style="width: 100%; padding: 0.75rem; background: #13131f; border: 1px solid #3f3f5a; border-radius: 8px; color: #fff; color-scheme: dark; outline: none;">
-        </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div>
+              <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem; color: #cbd5e1;">Tipo de Servicio *</label>
+              <select name="servicio" required style="width: 100%; padding: 0.75rem; background: #13131f; border: 1px solid #3f3f5a; border-radius: 8px; color: #fff; outline: none; box-sizing: border-box;">
+                <option value="Baño">Baño e higiene básica</option>
+                <option value="Corte">Corte de pelo y peinado</option>
+                <option value="Corte y Baño">Baño, Corte y Spa completo</option>
+              </select>
+            </div>
+            <div>
+              <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem; color: #cbd5e1;">Duración Estimada</label>
+              <input type="text" name="duracion" id="id_duracion" readonly placeholder="Se calcula por tamaño" style="width: 100%; padding: 0.75rem; background: #13131f; border: 1px solid #3f3f5a; border-radius: 8px; color: #a78bfa; font-weight: bold; outline: none; box-sizing: border-box;">
+            </div>
+          </div>
 
-        <div>
-          <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem; color: #cbd5e1;">Observaciones</label>
-          <textarea name="observaciones" rows="3" style="width: 100%; padding: 0.75rem; background: #13131f; border: 1px solid #3f3f5a; border-radius: 8px; color: #fff; outline: none;"></textarea>
-        </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div>
+              <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem; color: #cbd5e1;">Fecha y Hora *</label>
+              <input type="datetime-local" name="fecha_hora" required style="width: 100%; padding: 0.75rem; background: #13131f; border: 1px solid #3f3f5a; border-radius: 8px; color: #fff; color-scheme: dark; outline: none; box-sizing: border-box;">
+            </div>
+            <div>
+              <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem; color: #cbd5e1;">Precio del Servicio ($) *</label>
+              <input type="text" name="precio" id="id_precio" value="$" required placeholder="$0" style="width: 100%; padding: 0.75rem; background: #13131f; border: 1px solid #3f3f5a; border-radius: 8px; color: #fff; outline: none; box-sizing: border-box;">
+            </div>
+          </div>
 
-        <button type="submit" class="btn btn--primary" style="width: 100%; padding: 0.85rem; margin-top: 0.5rem; font-weight: bold; cursor: pointer;">
-          Agendar Servicio
-        </button>
-      </form>
-    </div>
-  </main>
+          <div>
+            <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem; color: #cbd5e1;">Observaciones</label>
+            <textarea name="observaciones" rows="3" style="width: 100%; padding: 0.75rem; background: #13131f; border: 1px solid #3f3f5a; border-radius: 8px; color: #fff; outline: none; box-sizing: border-box;"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn--primary" style="width: 100%; padding: 0.85rem; margin-top: 0.5rem; font-weight: bold; cursor: pointer; background: #7c3aed; color: #fff; border: none; border-radius: 8px;">
+            Agendar Servicio y Generar PDF
+          </button>
+        </form>
+      </div>
+    </main>
+  </div>
 </div>
+
+<script>
+(function() {
+  const input = document.getElementById('buscar_mascota_input');
+  const hiddenId = document.getElementById('id_mascota_hidden');
+  const dropdown = document.getElementById('mascota-dropdown');
+  const boxInfo = document.getElementById('info-mascota-box');
+  const lblDueno = document.getElementById('lbl_dueno');
+  const lblRaza = document.getElementById('lbl_raza');
+  const lblTamanoTexto = document.getElementById('lbl_tamano_texto');
+  const inputRaza = document.getElementById('id_raza');
+  const inputTamano = document.getElementById('id_tamano');
+  const inputDuracion = document.getElementById('id_duracion');
+  const inputPrecio = document.getElementById('id_precio');
+  const AJAX_URL = "{% url 'peluqueria:buscar_mascota' %}";
+  let timer = null;
+
+  // Filtrado dinámico mediante AJAX
+  input.addEventListener('input', function() {
+    clearTimeout(timer);
+    const q = this.value.trim();
+    if (q.length < 2) {
+      dropdown.style.display = 'none';
+      return;
+    }
+    timer = setTimeout(() => {
+      fetch(`${AJAX_URL}?q=${encodeURIComponent(q)}`)
+        .then(r => r.json())
+        .then(data => renderDropdown(data));
+    }, 250);
+  });
+
+  function renderDropdown(items) {
+    dropdown.innerHTML = '';
+    if (!items.length) {
+      dropdown.innerHTML = '<div style="padding: 10px; color: #94a3b8; font-size: 13px;">No se encontraron mascotas registradas.</div>';
+      dropdown.style.display = 'block';
+      return;
+    }
+    items.forEach(m => {
+      const div = document.createElement('div');
+      div.style.cssText = 'padding: 10px 12px; cursor: pointer; border-bottom: 1px solid #2d2d44; font-size: 13px; color: #e2e8f0;';
+      div.innerHTML = `<strong>${m.nombre}</strong> <span style="color: #94a3b8;">(Dueño: ${m.dueno})</span>`;
+      div.addEventListener('mouseenter', () => div.style.background = '#252538');
+      div.addEventListener('mouseleave', () => div.style.background = 'transparent');
+      div.addEventListener('click', () => seleccionarMascota(m));
+      dropdown.appendChild(div);
+    });
+    dropdown.style.display = 'block';
+  }
+
+  function seleccionarMascota(m) {
+    input.value = m.nombre;
+    hiddenId.value = m.id;
+    inputRaza.value = m.raza || 'No especificada';
+    inputTamano.value = m.tamano || 'PEQUENO';
+    
+    lblDueno.textContent = m.dueno;
+    lblRaza.textContent = m.raza || 'No especificada';
+    lblTamanoTexto.textContent = m.tamano_display || m.tamano;
+    boxInfo.style.display = 'block';
+    dropdown.style.display = 'none';
+
+    // RF25: Estimación automática de duración según tamaño
+    let tam = (m.tamano || '').toLowerCase();
+    if (tam.includes('peque') || tam === 'pequeno') {
+      inputDuracion.value = '1 hora';
+    } else if (tam.includes('mediano')) {
+      inputDuracion.value = '1 hora y media';
+    } else if (tam.includes('grande')) {
+      inputDuracion.value = '2 horas';
+    } else {
+      inputDuracion.value = '1 hora';
+    }
+  }
+
+  // Ocultar dropdown al hacer click fuera
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#buscar_mascota_input') && !e.target.closest('#mascota-dropdown')) {
+      dropdown.style.display = 'none';
+    }
+  });
+
+  // Validar precio: Inicia siempre con $ y solo permite números
+  inputPrecio.addEventListener('input', function(e) {
+    let val = e.target.value.replace(/[^0-9]/g, '');
+    e.target.value = '$' + val;
+  });
+
+  inputPrecio.addEventListener('keydown', function(e) {
+    if (this.selectionStart <= 1 && (e.key === 'Backspace' || e.key === 'ArrowLeft')) {
+      e.preventDefault();
+    }
+  });
+})();
+</script>
 {% endblock %}

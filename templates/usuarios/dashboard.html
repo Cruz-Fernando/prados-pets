@@ -91,19 +91,19 @@
         </div>
 
         <!-- Citas -->
-<div class="app-module-card">
-  <div class="app-module-card__icon">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-  </div>
-  <div class="app-module-card__body">
-    <div class="app-module-card__title">Citas</div>
-    <div class="app-module-card__desc">Agendamiento y gestión de citas médicas.</div>
-  </div>
-  <div class="app-module-card__footer">
-    <span class="app-module-card__tag app-module-card__tag--active">Activo</span>
-    <a href="/agendamiento/agendar/" class="btn btn--ghost btn--sm">Ir a Citas →</a>
-  </div>
-</div>
+        <div class="app-module-card">
+          <div class="app-module-card__icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="app-module-card__body">
+            <div class="app-module-card__title">Citas</div>
+            <div class="app-module-card__desc">Agendamiento y gestión de citas médicas.</div>
+          </div>
+          <div class="app-module-card__footer">
+            <span class="app-module-card__tag app-module-card__tag--active">Activo</span>
+            <a href="/agendamiento/agendar/" class="btn btn--ghost btn--sm">Ir a Citas →</a>
+          </div>
+        </div>
 
         <!-- Consulta y Hospitalización -->
         <div class="app-module-card app-module-card--disabled">
@@ -119,8 +119,8 @@
           </div>
         </div>
 
-        <!-- Peluquería -->
-        <div class="app-module-card app-module-card--disabled">
+        <!-- Peluquería (ACTIVADO) -->
+        <div class="app-module-card app-module-card--available">
           <div class="app-module-card__icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
           </div>
@@ -129,7 +129,8 @@
             <div class="app-module-card__desc">Servicios de baño, corte y estética canina.</div>
           </div>
           <div class="app-module-card__footer">
-            <span class="app-module-card__tag app-module-card__tag--soon">Próximamente</span>
+            <span class="app-module-card__tag app-module-card__tag--active">Activo</span>
+            <a href="{% url 'peluqueria:agendar' %}" class="btn btn--ghost btn--sm">Ir a Peluquería →</a>
           </div>
         </div>
 

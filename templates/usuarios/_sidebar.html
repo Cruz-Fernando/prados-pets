@@ -103,17 +103,17 @@
       <span class="sidebar__badge-soon">Pronto</span>
     </div>
 
-    <div class="sidebar__item sidebar__item--soon" title="Próximamente">
+    <!-- Peluquería (ACTIVADO) -->
+    <a href="{% url 'peluqueria:agendar' %}"
+       class="sidebar__item {% if request.resolver_match.app_name == 'peluqueria' %}sidebar__item--active{% endif %}"
+       id="nav-peluqueria">
       <span class="sidebar__icon">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14.121 14.121L19 19m-7-7l-5.879 5.879M10.5 7.5a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/>
-          <path d="M9 3h6l2 4H7L9 3z"/>
-          <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z" stroke-dasharray="2 2"/>
+          <circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/>
         </svg>
       </span>
       <span class="sidebar__label">Peluquería</span>
-      <span class="sidebar__badge-soon">Pronto</span>
-    </div>
+    </a>
 
     <!-- ADMINISTRACIÓN group -->
     <div class="sidebar__group-label">Administración</div>

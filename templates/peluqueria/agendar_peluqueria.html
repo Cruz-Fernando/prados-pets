@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Agendar Peluquería · Prados Pets{% endblock %}
+
+{% block body %}
+<div class="app-shell">
+  {% include "usuarios/_topbar.html" %}
+
+  <main class="app-content">
+    <div style="max-width: 650px; margin: 2rem auto; padding: 2rem; background: #1e1e2d; border: 1px solid #2d2d44; border-radius: 12px; color: #fff;">
+      <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem; color: #a78bfa;">HU07: Agendamiento de Peluquería y Spa</h2>
+      <p style="color: #94a3b8; font-size: 0.875rem; margin-bottom: 1.5rem;">RF25: Registro de cita con estimación automática de tiempo.</p>
+
+      {% if messages %}
+        <ul class="app-messages" style="margin-bottom: 1.5rem;">
+          {% for message in messages %}
+            <li class="app-messages__item app-messages__item--{{ message.tags }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      <form method="POST" style="display: flex; flex-direction: column; gap: 1.25rem;">
+        {% csrf_token %}
+
+        <div>
+          <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem; color: #cbd5e1;">Nombre de la Mascota</label>
+          <input type="text" name="nombre_mascota" required style="width: 100%; padding: 0.75rem; background: #13131f; border: 1px solid #3f3f5a; border-radius: 8px; color: #fff; outline: none;">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div>
+            <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem; color: #cbd5e1;">Raza</label>
+            <input type="text" name="raza" required style="width: 100%; padding: 0.75rem; background: #13131f; border: 1px solid #3f3f5a; border-radius: 8px; color: #fff; outline: none;">
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem; color: #cbd5e1;">Tamaño de la Mascota</label>
+            <select name="tamano" required style="width: 100%; padding: 0.75rem; background: #13131f; border: 1px solid #3f3f5a; border-radius: 8px; color: #fff; outline: none;">
+              <option value="PEQUENO">Pequeño (1 - 10 kg)</option>
+              <option value="MEDIANO" selected>Mediano (11 - 25 kg)</option>
+              <option value="GRANDE">Grande (Más de 25 kg)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem; color: #cbd5e1;">Tipo de Servicio</label>
+          <select name="servicio" required style="width: 100%; padding: 0.75rem; background: #13131f; border: 1px solid #3f3f5a; border-radius: 8px; color: #fff; outline: none;">
+            <option value="BANO">Baño e higiene básica</option>
+            <option value="CORTE">Corte de pelo y peinado</option>
+            <option value="COMPLETO">Baño, Corte y Spa completo</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem; color: #cbd5e1;">Fecha y Hora de la Cita</label>
+          <input type="datetime-local" name="fecha_hora" required style="width: 100%; padding: 0.75rem; background: #13131f; border: 1px solid #3f3f5a; border-radius: 8px; color: #fff; color-scheme: dark; outline: none;">
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem; color: #cbd5e1;">Observaciones</label>
+          <textarea name="observaciones" rows="3" style="width: 100%; padding: 0.75rem; background: #13131f; border: 1px solid #3f3f5a; border-radius: 8px; color: #fff; outline: none;"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn--primary" style="width: 100%; padding: 0.85rem; margin-top: 0.5rem; font-weight: bold; cursor: pointer;">
+          Agendar Servicio
+        </button>
+      </form>
+    </div>
+  </main>
+</div>
+{% endblock %}

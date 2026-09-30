@@ -1,3 +1,5 @@
+from datetime import date, timedelta
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
@@ -8,7 +10,9 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 
 from apps.directorio.models import Mascota
+from apps.peluqueria.models import CitaPeluqueria
 
+from . import calendario as cal
 from .forms import CitaForm
 from .models import Cita
 
@@ -76,3 +80,58 @@ def cita_pdf(request, pk):
         return response
     except ImportError:
         return HttpResponse(html_str)
+
+
+@login_required
+def calendario(request):
+    """HU08: Calendario visual diario y semanal."""
+    vista = request.GET.get("vista", "semana")
+    if vista not in ("semana", "dia"):
+        vista = "semana"
+
+    hoy = timezone.localdate()
+    try:
+        fecha = date.fromisoformat(request.GET.get("fecha", ""))
+    except ValueError:
+        fecha = hoy
+
+    if vista == "dia":
+        fechas = [fecha]
+        paso = timedelta(days=1)
+    else:
+        lunes = cal.inicio_semana(fecha)
+        fechas = [lunes + timedelta(days=i) for i in range(7)]
+        paso = timedelta(days=7)
+
+    desde, hasta = fechas[0], fechas[-1]
+    citas = Cita.objects.select_related("mascota", "veterinario").filter(fecha__range=(desde, hasta))
+    citas_pelu = CitaPeluqueria.objects.filter(fecha_hora__date__range=(desde, hasta))
+
+    eventos = cal.eventos_desde_citas(citas) + cal.eventos_desde_peluqueria(citas_pelu)
+    hora_inicio, hora_fin = cal.rango_horas(eventos)
+    dias = cal.construir_dias(eventos, fechas, hora_inicio, hora_fin)
+
+    direccion = request.GET.get("dir", "")
+    if direccion not in ("prev", "next"):
+        direccion = ""
+
+    activos = [e for e in eventos if not e.cancelada]
+    contexto = {
+        "direccion": direccion,
+        "hora_inicio": hora_inicio,
+        "hora_fin": hora_fin,
+        "total_citas": len(activos),
+        "total_canceladas": len(eventos) - len(activos),
+        "vista": vista,
+        "fecha": fecha,
+        "dias": dias,
+        "horas": list(range(hora_inicio, hora_fin)),
+        "alto_grilla": (hora_fin - hora_inicio) * 64,
+        "titulo_rango": cal.titulo_rango(vista, fechas),
+        "fecha_anterior": (fecha - paso).isoformat(),
+        "fecha_siguiente": (fecha + paso).isoformat(),
+        "hoy": hoy.isoformat(),
+        "total_consultas": sum(1 for e in activos if e.categoria == cal.CATEGORIA_CONSULTA),
+        "total_peluqueria": sum(1 for e in activos if e.categoria == cal.CATEGORIA_PELUQUERIA),
+    }
+    return render(request, "agendamiento/calendario.html", contexto)

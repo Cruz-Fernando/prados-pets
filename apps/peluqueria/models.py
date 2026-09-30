@@ -10,9 +10,9 @@ class CitaPeluqueria(models.Model):
     ]
 
     SERVICIO_CHOICES = [
-        ('CORTE',    'Corte de pelo y peinado'),
-        ('BANO',     'Baño e higiene básica'),
-        ('COMPLETO', 'Baño, Corte y Spa completo'),
+        ('BANO',     'Solamente Baño'),
+        ('CORTE',    'Corte Despuntado (Solo tijera)'),
+        ('COMPLETO', 'Corte Total (Máquina y tijera)'),
     ]
 
     nombre_mascota      = models.CharField(max_length=100)

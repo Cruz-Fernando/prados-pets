@@ -155,8 +155,6 @@ python manage.py runserver
 
 Luego abre `http://127.0.0.1:8000/` en el navegador.
 
-> 🔒 El archivo `.env` contiene credenciales: **nunca lo subas al repositorio** (ya está en `.gitignore`).
-
 > 🔄 Si trabajas con cambios de otros compañeros, recuerda hacer `git pull` y volver a correr `python manage.py migrate` para aplicar las migraciones nuevas.
 
 ---

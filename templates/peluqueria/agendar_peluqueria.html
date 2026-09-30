@@ -105,7 +105,8 @@
             </div>
             <div class="pp-field">
               <label class="pp-label">Precio ($) <span class="pp-req">*</span></label>
-              <input type="text" name="precio" id="id_precio" value="$" required class="pp-input">
+              <input type="text" name="precio" id="id_precio" value="$" required class="pp-input"
+                     inputmode="numeric" autocomplete="off">
             </div>
           </div>
 
@@ -242,12 +243,52 @@ input[type="datetime-local"].pp-input { color-scheme:dark; }
     if(!e.target.closest('.pp-search-wrap')) dropdown.style.display='none';
   });
 
-  inPrecio.addEventListener('input', function(){
-    let v = this.value.replace(/[^0-9]/g,'');
-    this.value = '$' + v;
+  // ── PRECIO: punto de miles automático (123.456) + sufijo COP ──
+  const SUFIJO = ' COP';
+
+  function formatearPrecio(){
+    const raw     = inPrecio.value;
+    const caret   = inPrecio.selectionStart || 0;
+    const antes   = raw.slice(0, caret).replace(/\D/g, '').length;   // dígitos a la izquierda del cursor
+    const digitos = raw.replace(/\D/g, '').replace(/^0+(?=\d)/, '');  // solo números, sin ceros a la izquierda
+    if(!digitos){ inPrecio.value = '$'; return; }
+    const num = digitos.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    inPrecio.value = '$' + num + SUFIJO;
+    // Devuelve el cursor a la misma posición lógica dentro del número
+    const limite = Math.min(antes, digitos.length);
+    let vistos = 0, i = 0;
+    while(i < num.length && vistos < limite){ if(num[i] !== '.') vistos++; i++; }
+    inPrecio.setSelectionRange(1 + i, 1 + i);
+  }
+
+  // Evita que el cursor quede dentro del sufijo " COP"
+  function fijarCursor(){
+    const v = inPrecio.value;
+    if(!v.endsWith(SUFIJO)) return;
+    const limite = v.length - SUFIJO.length;
+    if(inPrecio.selectionStart === inPrecio.selectionEnd && inPrecio.selectionStart > limite){
+      inPrecio.setSelectionRange(limite, limite);
+    }
+  }
+
+  inPrecio.addEventListener('input', formatearPrecio);
+  inPrecio.addEventListener('click', fijarCursor);
+  inPrecio.addEventListener('focus', ()=> setTimeout(fijarCursor, 0));
+  inPrecio.addEventListener('keyup', function(e){
+    if(e.key === 'ArrowRight' || e.key === 'End') fijarCursor();
   });
   inPrecio.addEventListener('keydown', function(e){
-    if(this.selectionStart <= 1 && (e.key==='Backspace'||e.key==='Delete')) e.preventDefault();
+    fijarCursor();
+    const colapsado = this.selectionStart === this.selectionEnd;
+    const pos = this.selectionStart;
+    if(e.key === 'Backspace' && colapsado){
+      if(pos <= 1){ e.preventDefault(); return; }               // no borrar el "$"
+      if(this.value[pos - 1] === '.') this.setSelectionRange(pos - 1, pos - 1); // saltar el punto
+    }
+    if(e.key === 'Delete' && colapsado){
+      if(pos < 1){ e.preventDefault(); return; }
+      if(this.value[pos] === '.') this.setSelectionRange(pos + 1, pos + 1);
+    }
   });
 }());
 </script>

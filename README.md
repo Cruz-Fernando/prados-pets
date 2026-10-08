@@ -19,12 +19,10 @@ Consulta · Hospitalización · Peluquería · Inventario · Facturación · Dir
 
 - [Acerca del proyecto](#-acerca-del-proyecto)
 - [Módulos del alcance (E1)](#-módulos-del-alcance-e1)
-- [Funcionalidades destacadas](#-funcionalidades-destacadas)
 - [Stack tecnológico](#-stack-tecnológico)
 - [Estructura del repositorio](#-estructura-del-repositorio)
 - [Cómo levantar el proyecto en local](#-cómo-levantar-el-proyecto-en-local)
 - [Cuentas de prueba](#-cuentas-de-prueba-para-desarrollo-por-rol)
-- [Pruebas](#-pruebas)
 - [Despliegue](#-despliegue)
 - [Flujo de trabajo con Git](#-flujo-de-trabajo-con-git)
 - [Gestión del proyecto](#-gestión-del-proyecto)
@@ -43,25 +41,27 @@ Proyecto desarrollado para la asignatura *Administración de Proyectos Informát
 
 ## 🧩 Módulos del alcance (E1)
 
-| # | Módulo | Descripción |
-|---|---|---|
-| 1 | **Agendamiento** | Citas de consulta y de peluquería (la hospitalización no se agenda) |
-| 2 | **Consulta y hospitalización** | Historia clínica y orden de medicamentos |
-| 3 | **Peluquería** | Servicios de grooming y comprobante en PDF |
-| 4 | **Facturación** | Facturación consolidada |
-| 5 | **Inventario y alertas** | Stock bajo y vencimiento por lote |
-| 6 | **Directorio y fidelización** | Dueños, mascotas y programa de fidelización |
-| 7 | **Reportes y estadísticas** | Indicadores de la operación de la clínica |
+Según el alcance acordado con el patrocinador (Charter v2.0 — octubre 2026), el entregable E1 comprende **6 módulos** y **3 Historias de Usuario** (HU-01 a HU-03), con 12 Requerimientos Funcionales (RF04 a RF15).
+
+| # | Módulo | RF cubiertos | HU |
+|---|---|---|---|
+| 1 | **Directorio Digital de Clientes y Mascotas** | RF05, RF06 | HU-01 |
+| 2 | **Agendamiento Visual de Citas** | RF04, RF07 | HU-01 |
+| 3 | **Atención Médica e Historial Clínico** | RF08, RF09, RF10 | HU-02 |
+| 4 | **Peluquería / Grooming** | RF13 | HU-03 |
+| 5 | **Control de Inventario y Alertas** | RF11, RF12 | HU-01, HU-02 |
+| 6 | **Facturación Consolidada y Reportes** | RF14, RF15 | HU-01 |
+
+> ⚠️ La hospitalización **no se agenda** (entra como atención derivada de consulta — RF10).
 
 ---
 
 ## ✨ Funcionalidades destacadas
 
-- 📅 **Calendario visual (HU08):** vistas por día y por semana que unen las citas de consulta y de peluquería, con colores por servicio, citas cruzadas en columnas, línea de hora actual, tarjetas de resumen que funcionan como filtros y atajos de teclado.
-- ✂️ **Agendamiento de peluquería:** búsqueda de mascota por nombre, dueño o teléfono; duración estimada según el tamaño; selección del groomer responsable.
-- 🧴 **Servicios de peluquería:** *Solamente Baño*, *Corte Despuntado (solo tijera)* y *Corte Total (máquina y tijera)*.
-- 💵 **Precio en pesos colombianos:** el campo de precio formatea automáticamente con puntos de miles y el sufijo COP (por ejemplo, `$123.456 COP`).
-- 📄 **Comprobante en PDF:** al agendar un servicio de peluquería se genera el comprobante para el cliente.
+- 📅 **Calendario visual (HU08):** vistas día y semana con citas de consulta y peluquería unificadas, colores por servicio, línea de hora actual y atajos de teclado.
+- 🔍 **Buscador unificado:** búsqueda de mascota por nombre, dueño o teléfono con autocompletado AJAX.
+- ✂️ **Agendamiento de peluquería:** duración estimada según tamaño y selección de groomer responsable.
+- 📄 **Comprobante en PDF:** se genera al agendar tanto consultas médicas como servicios de peluquería.
 - 🔐 **Roles y permisos:** administrador, veterinario, auxiliar, groomer y domiciliario.
 
 ---
@@ -70,11 +70,11 @@ Proyecto desarrollado para la asignatura *Administración de Proyectos Informát
 
 | Capa | Tecnología |
 |---|---|
-| Backend / Frontend | Django (Python) — arquitectura de 3 capas (MVT) |
+| Backend / Frontend | Django 6.1 (Python) — arquitectura MVT |
 | Base de datos | PostgreSQL (Supabase) |
 | Generación de PDF | xhtml2pdf |
 | Servidor de producción | Gunicorn + WhiteNoise |
-| Metodología | Scrum, sprints de 2 semanas |
+| Metodología | Scrum, sprints semanales |
 | Gestión de tareas | GitHub Issues + GitHub Projects |
 
 ---
@@ -95,23 +95,14 @@ prados-pets/
 ├── config/                  # proyecto Django (urls, wsgi, asgi)
 │   └── settings/
 │       ├── base.py
-│       ├── dev.py           # PostgreSQL (Supabase), DEBUG=True
-│       └── prod.py          # PostgreSQL, DEBUG=False
-├── requirements/
-│   ├── base.txt
-│   ├── dev.txt
-│   └── prod.txt
+│       ├── dev.py
+│       └── prod.py
 ├── static/
 ├── templates/
-│   ├── base.html
-│   ├── agendamiento/
-│   ├── directorio/
-│   ├── peluqueria/
-│   └── usuarios/
-├── .env.example             # plantilla de variables de entorno
-├── Procfile                 # comandos de release y web para el despliegue
+├── .env.example
+├── Procfile
 ├── manage.py
-├── requirements.txt         # dependencias completas del proyecto
+├── requirements.txt
 └── README.md
 ```
 
@@ -123,7 +114,7 @@ prados-pets/
 
 - Python 3
 - Git
-- Credenciales de la base de datos compartida (las entrega el administrador del equipo por un canal privado)
+- Credenciales de la base de datos compartida (las entrega el director del proyecto por canal privado)
 
 ### Pasos
 
@@ -140,84 +131,66 @@ source venv/bin/activate        # En Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
 # 4. Configurar variables de entorno
-cp .env.example .env            # En Windows: copy .env.example .env
-# Abre .env y completa DB_USER, DB_PASSWORD y DB_HOST
+cp .env.example .env
+# Completa DB_USER, DB_PASSWORD y DB_HOST en el archivo .env
 
 # 5. Aplicar migraciones
 python manage.py migrate
 
-# 6. Crear superusuario (para entrar al admin de Django)
-python manage.py createsuperuser
-
-# 7. Levantar el servidor de desarrollo
+# 6. Levantar el servidor de desarrollo
 python manage.py runserver
 ```
 
-Luego abre `http://127.0.0.1:8000/` en el navegador.
-
-> 🔄 Si trabajas con cambios de otros compañeros, recuerda hacer `git pull` y volver a correr `python manage.py migrate` para aplicar las migraciones nuevas.
+Abre `http://127.0.0.1:8000/` en el navegador.
 
 ---
 
 ## 👤 Cuentas de prueba para desarrollo (por rol)
 
-> **⚠️ AVISO IMPORTANTE DE SEGURIDAD:**
-> Las siguientes cuentas y contraseñas son de **uso exclusivo para pruebas y desarrollo local**.
-> La seguridad de estas credenciales es deliberadamente baja para facilitar el testing del equipo.
-> **Bajo ninguna circunstancia deben utilizarse en entornos de producción.**
-
-Puedes sincronizar o restablecer estas cuentas en cualquier momento ejecutando:
+> **⚠️ Solo para desarrollo local. No usar en producción.**
 
 ```bash
 python manage.py crear_usuarios_prueba
 ```
 
-| Rol | Usuario | Contraseña | Nombre completo | Permisos |
-|---|---|---|---|---|
-| **Administrador** | `administrador` | `Admin123*` | Administrador General | Superusuario / Staff |
-| **Veterinario** | `veterinario` | `Vet123*` | Dr. Veterinario Pruebas | Personal clínico |
-| **Auxiliar** | `auxiliar` | `Auxiliar123*` | Auxiliar Veterinario Pruebas | Apoyo clínico |
-| **Groomer** | `groomer` | `Groomer123*` | Groomer / Estilista Canino | Peluquería |
-| **Domiciliario** | `domiciliario` | `Domicilio123*` | Repartidor / Domiciliario | Envíos |
-
----
-
-## 🧪 Pruebas
-
-```bash
-python manage.py test
-```
+| Rol | Usuario | Contraseña |
+|---|---|---|
+| **Administrador** | `administrador` | `Admin123*` |
+| **Veterinario** | `veterinario` | `Vet123*` |
+| **Auxiliar** | `auxiliar` | `Auxiliar123*` |
+| **Groomer** | `groomer` | `Groomer123*` |
+| **Domiciliario** | `domiciliario` | `Domicilio123*` |
 
 ---
 
 ## ☁️ Despliegue
 
-El `Procfile` define cómo se ejecuta el proyecto en producción:
+El `Procfile` define el ciclo de vida en Railway:
 
-- **release:** aplica las migraciones y recolecta los archivos estáticos.
-- **web:** sirve la aplicación con Gunicorn.
+- **release:** `migrate` + `collectstatic` automáticos en cada deploy.
+- **web:** Gunicorn con 2 workers.
 
-Las variables de entorno necesarias están descritas en `.env.example`. En producción se usa la configuración `config.settings.prod`.
+Variables de entorno necesarias: ver `.env.example`.
+
+Producción: `https://prados-pets-canina.up.railway.app`
 
 ---
 
 ## 🌿 Flujo de trabajo con Git
 
-- `main`: rama estable, solo recibe merges desde `develop`.
-- `develop`: rama de integración de cada sprint.
-- `feature/HUxx-nombre-corto`: una rama por historia de usuario (por ejemplo `feature/HU11-registrar-consulta`), creada desde `develop`.
+- `main`: rama estable, recibe merges desde ramas de HU vía Pull Request.
+- `HUxx-nombre-corto`: una rama por historia de usuario, creada desde `main`.
 
-Cada Pull Request debe referenciar el issue correspondiente (por ejemplo, escribir `Closes #13` en la descripción del PR para el HU11).
-
-> 📝 **Commits:** escribe mensajes claros y en español. Revisa que el mensaje no incluya líneas de co-autor que no correspondan (por ejemplo `Co-authored-by`) antes de subir tus cambios.
+Cada PR debe incluir `Closes #N` para cerrar el issue correspondiente.
 
 ---
 
 ## 📊 Gestión del proyecto
 
-- **Backlog e historias de usuario:** ver la pestaña [Issues](../../issues) — cada una está etiquetada con `sprint:N`, `modulo:*` y `resp:*`.
-- **Tablero Scrum:** ver la pestaña [Projects](../../projects) → *Prados Pets - Sprints*.
-- **Sprints:** 6 sprints de 2 semanas, del 07 de septiembre al 30 de noviembre de 2026 (cierre de E1).
+- **Backlog e historias de usuario:** pestaña [Issues](../../issues).
+- **Tablero Scrum:** pestaña [Projects](../../projects).
+- **Sprints:** semanales, del 21 de septiembre al 08 de noviembre de 2026 (cierre E1).
+- **Equipo:** 3 parejas de trabajo, 1 HU por pareja por sprint.
 
 ---
 
@@ -225,14 +198,14 @@ Cada Pull Request debe referenciar el issue correspondiente (por ejemplo, escrib
 
 | Nombre | Rol |
 |---|---|
-| Jhojan Cruz Bulla | Director de Proyecto / Product Owner / Scrum Master |
+| Jhojan Cruz Bulla | Director de Proyecto / Scrum Master / Fullstack |
 | David Torres Ovallos | Líder Tecnológico / Backend |
+| Oscar Enrique Arias Cardile | Líder Documental / Fullstack |
 | Daniel Alejandro Pacheco Villamizar | Frontend |
-| Juan Camilo Guarín Solano | Backend |
-| Oscar Enrique Arias Cardile | Fullstack |
-| Samuel Alexander García Sandoval | Backend |
 | Abel Stiven Ayala Llanes | Fullstack |
-| Jeiner Duván Carvajal Araque | Frontend |
+| Jeiner Duván Carvajal Araque | Frontend / QA |
+
+> Samuel Alexander García Sandoval y Juan Camilo Guarín Solano se retiraron del equipo en octubre de 2026.
 
 ---
 
